@@ -41,8 +41,9 @@ export default Component.extend({
     let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
     aanwezigen = this.mergeAanwezigeStatus(this.aanwezigen, aanwezigen);
 
-    this.set('_aanwezigen' , aanwezigen);
+    this.set('_aanwezigen' , aanwezigen.sort(this.sortBuildAanwezige));
   }),
+
   didReceiveAttrs(){
     this._super(...arguments);
     this.loadData.perform();
@@ -60,6 +61,14 @@ export default Component.extend({
     return buildAanwezigen;
   },
 
+  sortBuildAanwezige(a,b){
+    if(a.persoon.gebruikteVoornaam < b.persoon.gebruikteVoornaam)
+      return -1;
+    if (a.persoon.gebruikteVoornaam > b.persoon.gebruikteVoornaam)
+      return 1;
+    return 0;
+  },
+
   actions:{
 
     add(){
@@ -72,6 +81,7 @@ export default Component.extend({
 
     addAanwezige(){
       this._aanwezigen.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
+      this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       this.aanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
@@ -89,6 +99,7 @@ export default Component.extend({
       this.aanwezigen.pushObject(persoon);
 
       this.mergeAnwezigeStatus(this.aanwezigen || A(), this._aanwezigen);
+      this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
     }
   }
 
