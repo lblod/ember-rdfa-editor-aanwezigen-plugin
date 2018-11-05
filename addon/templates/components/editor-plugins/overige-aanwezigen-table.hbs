@@ -4,9 +4,16 @@
       <th>Naam</th>
       <th>Geboortedatum</th>
       <th>
-        {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "add")}}
-          voeg toe
-        {{/wu-link-button}}
+        <div class="grid">
+          <div class="col--6-12">
+            Actie
+          </div>
+          <div class="col--6-12 u-align--right">
+            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "add")}}
+              <i class="vi vi-plus vi-u-s"></i>Voeg bijkomende persoon toe
+            {{/wu-link-button}}
+          </div>
+        </div>
       </th>
     </tr>
   </thead>
@@ -19,25 +26,19 @@
           <td>{{editor-plugins/personen-selector onSelect=(action "selectAanwezige")}}</td>
           <td>{{moment-format newAanwezige.geboorte.datum 'DD/MM/YYYY'}}</td>
           <td>
-            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "addAanwezige")}}
-              voeg toe
-            {{/wu-link-button}}
-            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "addAanwezigeCancel")}}
-              annuleer
-            {{/wu-link-button}}
+            {{#wu-button-group}}
+              {{#wu-link-button class="button--small" isNarrow=true onClick=(action "addAanwezige")}}
+                <i class="vi vi-check vi-u-xs"></i>Voeg persoon toe
+              {{/wu-link-button}}
+              {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "addAanwezigeCancel")}}
+                <i class="vi vi-cross vi-u-s"></i>Annuleer
+              {{/wu-link-button}}
+            {{/wu-button-group}}
           </td>
         </tr>
       {{/if}}
-      {{#each aanwezigen as |persoon|}}
-        <tr>
-          <td>{{persoon.gebruikteVoornaam}} {{persoon.achternaam}}</td>
-          <td>{{moment-format persoon.geboorte.datum 'DD/MM/YYYY'}}</td>
-          <td>
-            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "remove" persoon)}}
-              verwijder uit de lijst
-            {{/wu-link-button}}
-          </td>
-        </tr>
+      {{#each _aanwezigen as |aanwezige|}}
+        {{editor-plugins/overige-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
       {{/each}}
     {{/if}}
   </tbody>

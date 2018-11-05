@@ -9,7 +9,7 @@ export default Component.extend({
   verkozenGevolgUri: 'http://data.vlaanderen.be/id/concept/VerkiezingsresultaatGevolgCode/89498d89-6c68-4273-9609-b9c097727a0f',
   store: service(),
   loadData: task(function *(){
-    let aanwezigen = yield this.store.query('persoon',
+    let personen = yield this.store.query('persoon',
                      {
                        filter: {
                          'is-kandidaat-voor': {
@@ -36,18 +36,31 @@ export default Component.extend({
                        page: { size: 1000 },
                        sort:'gebruikte-voornaam'
                      });
-    this.set('aanwezigen',A(aanwezigen.toArray()));
+
+    //TODO: sort
+    let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
+    aanwezigen = this.mergeAanwezigeStatus(this.aanwezigen, aanwezigen);
+
+    this.set('_aanwezigen' , aanwezigen);
   }),
   didReceiveAttrs(){
     this._super(...arguments);
-    if(!this.aanwezigen)
-      this.loadData.perform();
+    this.loadData.perform();
+  },
+
+  mergeAanwezigeStatus(recievedAanwezigen, buildAanwezigen){
+    for(let persoon of recievedAanwezigen){
+      let bAanwezige = buildAanwezigen.find(b => persoon.uri == b.persoon.uri);
+      if(bAanwezige)
+        bAanwezige['aanwezig'] = true;
+      else
+        buildAanwezigen.pushObject({ 'aanwezig': true, persoon });
+    }
+
+    return buildAanwezigen;
   },
 
   actions:{
-    remove(persoon){
-      this.aanwezigen.removeObject(persoon);
-    },
 
     add(){
       this.set('addAanwezigeMode', true);
@@ -58,7 +71,9 @@ export default Component.extend({
     },
 
     addAanwezige(){
+      this._aanwezigen.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
       this.aanwezigen.pushObject(this.newAanwezige);
+
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
     },
@@ -66,6 +81,14 @@ export default Component.extend({
     addAanwezigeCancel(){
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
+    },
+
+    toggleAanwezigheid(status, persoon){
+      if(status)
+        this.aanwezigen.removeObject(persoon);
+      this.aanwezigen.pushObject(persoon);
+
+      this.mergeAnwezigeStatus(this.aanwezigen || A(), this._aanwezigen);
     }
   }
 
