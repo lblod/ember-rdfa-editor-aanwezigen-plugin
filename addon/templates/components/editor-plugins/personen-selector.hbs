@@ -1,0 +1,13 @@
+{{#power-select
+   loadingMessage="Aan het laden..."
+   noMatchesMessage="Geen resultaten"
+   searchMessage="Typ om te zoeken"
+   renderInPlace=true
+   placeholder="Zoek op achternaam"
+   allowClear=allowClear
+   search=(perform searchByName)
+   selected=_persoon
+   onchange=(action "select")
+   as |persoon|}}
+  {{persoon.gebruikteVoornaam}} {{persoon.achternaam}}, geboortedatum: {{moment-format persoon.geboorte.datum 'DD/MM/YYYY'}}
+{{/power-select}}

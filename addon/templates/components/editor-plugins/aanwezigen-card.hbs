@@ -1,0 +1,56 @@
+<div class="modal-dialog__header">
+  <div class="grid">
+    <div class="col--10-12">
+      {{#if bestuursorgaanUri}}
+        {{#if loadData.isRunning}}
+          <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+        {{else}}
+          <p class="u-spacer--tiny">
+            Wil u graag de <strong>aanwezigen</strong> beheren?
+          </p>
+        {{/if}}
+      {{else}}
+        <p class="u-spacer--tiny">
+          Gelieve eerste een bestuursorgaan te selecteren (bovenaan het document).
+        </p>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<div class="modal-dialog__footer">
+  {{#wu-button-group}}
+    {{#if bestuursorgaanUri}}
+      {{wu-button
+        label="Ga naar tabel"
+        isNarrow=true
+        onClick=(action "togglePopup")
+      }}
+    {{/if}}
+    {{/wu-button-group}}
+</div>
+
+{{# if popup}}
+  {{#wu-modal
+     title="Beheer aanwezigen."
+     dialog-class="modal-dialog--wide modal-dialog--sectioned"
+     dialog-content-class="modal-dialog__content--sectioned"
+     onClose=(action 'togglePopup')
+     as |m|}}
+    {{#m.content isSectioned=true}}
+      {{editor-plugins/aanwezigen-modal
+        bestuurseenheid=bestuurseenheid
+        bestuursorgaan=bestuursorgaan
+        editMode=info.editMode
+        outputId=outputId
+      }}
+    {{/m.content}}
+    <div class="modal-dialog__footer">
+      {{#wu-button-group}}
+        {{wu-button label="Voeg tabel in" class="button button--narrow" onClick=(action 'insert')}}
+        {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
+      {{/wu-button-group}}
+    </div>
+  {{/wu-modal}}
+{{/if}}
+{{yield}}

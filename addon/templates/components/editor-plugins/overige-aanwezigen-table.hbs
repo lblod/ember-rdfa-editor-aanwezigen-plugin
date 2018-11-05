@@ -1,0 +1,45 @@
+<table class="data-table data-table--lined data-table--zebra data-table--tight">
+  <thead>
+    <tr>
+      <th>Naam</th>
+      <th>Geboortedatum</th>
+      <th>
+        {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "add")}}
+          voeg toe
+        {{/wu-link-button}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if loadData.isRunning}}
+      <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+    {{else}}
+      {{#if addAanwezigeMode}}
+        <tr>
+          <td>{{editor-plugins/personen-selector onSelect=(action "selectAanwezige")}}</td>
+          <td>{{moment-format newAanwezige.geboorte.datum 'DD/MM/YYYY'}}</td>
+          <td>
+            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "addAanwezige")}}
+              voeg toe
+            {{/wu-link-button}}
+            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "addAanwezigeCancel")}}
+              annuleer
+            {{/wu-link-button}}
+          </td>
+        </tr>
+      {{/if}}
+      {{#each aanwezigen as |persoon|}}
+        <tr>
+          <td>{{persoon.gebruikteVoornaam}} {{persoon.achternaam}}</td>
+          <td>{{moment-format persoon.geboorte.datum 'DD/MM/YYYY'}}</td>
+          <td>
+            {{#wu-link-button class="button--link button--tiny" isNarrow=true onClick=(action "remove" persoon)}}
+              verwijder uit de lijst
+            {{/wu-link-button}}
+          </td>
+        </tr>
+      {{/each}}
+    {{/if}}
+  </tbody>
+</table>
+{{yield}}

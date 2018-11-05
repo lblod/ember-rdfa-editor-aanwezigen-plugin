@@ -1,0 +1,18 @@
+<div style="height: 75px;">
+  <h1>Selecteer voorzitter</h1>
+  {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
+</div>
+<div style="height: 75px;">
+  <h1>Selecteer secretaris</h1>
+  {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
+</div>
+<div>
+  <h1>Overige aanwezigen</h1>
+  {{editor-plugins/overige-aanwezigen-table aanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
+</div>
+{{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
+  voorzitter=voorzitter
+  secretaris=secretaris
+  overigeAanwezigen=overigeAanwezigen
+}}
+{{yield}}
