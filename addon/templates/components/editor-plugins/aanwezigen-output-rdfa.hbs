@@ -1,23 +1,17 @@
 <ul class="bullet-list">
   {{#if voorzitter}}
-      <li>
-      {{#with-rdfa-resource resource=voorzitter as |ctx|}}
-        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}} (voorzitter)
-      {{/with-rdfa-resource}}
-      </li>
+    <li>
+      <span property={{propertyToUse}} resource={{voorzitter.uri}}>{{voorzitter.fullName}}</span>
+    </li>
   {{/if}}
   {{#if secretaris}}
     <li>
-      {{#with-rdfa-resource resource=secretaris as |ctx|}}
-        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}} (secretaris)
-      {{/with-rdfa-resource}}
+      <span property={{propertyToUse}} resource={{secretaris.uri}}>{{secretaris.fullName}}</span>
     </li>
   {{/if}}
   <li>
     {{#each sortedAanwezigen as |aanwezige|}}
-      {{#with-rdfa-resource resource=aanwezige as |ctx|}}
-        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}}
-      {{/with-rdfa-resource}}
+      <span property={{propertyToUse}} resource={{aanwezige.uri}}>{{aanwezige.fullName}}</span>, &nbsp;
   {{/each}}
   </li>
 </ul>

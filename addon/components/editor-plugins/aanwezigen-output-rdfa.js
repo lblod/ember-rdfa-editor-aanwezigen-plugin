@@ -6,7 +6,7 @@ export default Component.extend({
   layout,
 
   sortedAanwezigen: computed('overigeAanwezigen', function(){
-    return this.overigeAaanwezigen.sort(this.sortPersoon);
+    return this.overigeAanwezigen.sort(this.sortPersoon);
   }),
 
   sortPersoon(a,b){

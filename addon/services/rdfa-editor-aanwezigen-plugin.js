@@ -43,14 +43,16 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
 
       if(!domNode) continue;
 
+      let propertyToUse = this.returnPropertyToUse(context);
+
       if(triple.predicate == this.insertAanwezigenText){
         hintsRegistry.removeHintsInRegion(context.region, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
+        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
       }
       let domNodeRegion = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
       if(triple.predicate == this.aanwezigenTable && !hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
         hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
+        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
       }
     }
 
@@ -81,6 +83,15 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     return null;
   },
 
+  returnPropertyToUse(context){
+    let triples = context.context.slice().reverse();
+    for(let triple of triples){
+      if(triple.predicate == 'a' && triple.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt')
+        return 'besluit:heeftAanwezige';
+    }
+    return 'besluit:heeftAanwezigeBijStart';
+  },
+
   /**
    * Generates a card given a hint
    *
@@ -104,6 +115,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
         domNodeToUpdate: hint.domNode,
         instructiveUri: hint.instructiveUri,
         editMode: hint.options.editMode,
+        propertyToUse: hint.options.propertyToUse,
         hrId, hintsRegistry, editor
       },
       location: hint.location,
