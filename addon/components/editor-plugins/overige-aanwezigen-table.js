@@ -10,16 +10,16 @@ export default Component.extend({
   verkozenGevolgUri: 'http://data.vlaanderen.be/id/concept/VerkiezingsresultaatGevolgCode/89498d89-6c68-4273-9609-b9c097727a0f',
   store: service(),
 
-  overigeAanwezigen: computed('aanwezigen','overigeAanwezigen.[]', {
+  aanwezigenToSelect: computed('overigeAanwezigen','aanwezigenToSelect.[]', {
     get(){
-      this.mergeAanwezigeStatus(this.aanwezigen, this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigeAanwezigen, this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     },
 
     set(k, v){
       this.set('_aanwezigen', v);
-      this.mergeAanwezigeStatus(this.aanwezigen, this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigeAanwezigen, this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     }
@@ -55,7 +55,7 @@ export default Component.extend({
                      });
 
     let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
-    this.set('overigeAanwezigen' , aanwezigen);
+    this.set('aanwezigenToSelect', aanwezigen);
   }),
 
   didReceiveAttrs(){
@@ -96,8 +96,8 @@ export default Component.extend({
     addAanwezige(){
       if(!this.newAanwezige)
         return;
-      this.overigeAanwezigen.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
-      this.aanwezigen.pushObject(this.newAanwezige);
+      this.aanwezigenToSelect.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
+      this.overigeAanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
@@ -110,9 +110,9 @@ export default Component.extend({
 
     toggleAanwezigheid(status, persoon){
       if(!status)
-        this.aanwezigen.removeObject(persoon);
+        this.overigeAanwezigen.removeObject(persoon);
       else
-        this.aanwezigen.pushObject(persoon);
+        this.overigeAanwezigen.pushObject(persoon);
     }
   }
 

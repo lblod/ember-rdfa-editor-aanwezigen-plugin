@@ -37,7 +37,7 @@
           </td>
         </tr>
       {{/if}}
-      {{#each overigeAanwezigen as |aanwezige|}}
+      {{#each aanwezigenToSelect as |aanwezige|}}
         {{editor-plugins/overige-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
       {{/each}}
     {{/if}}

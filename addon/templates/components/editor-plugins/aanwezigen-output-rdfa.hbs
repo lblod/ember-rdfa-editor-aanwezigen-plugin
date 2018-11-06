@@ -1,12 +1,12 @@
 <ul class="bullet-list">
   {{#if voorzitter}}
     <li>
-      <span property={{propertyToUse}} resource={{voorzitter.uri}}>{{voorzitter.fullName}}</span>
+      <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}}>{{voorzitter.fullName}} (voorzitter)</span>
     </li>
   {{/if}}
   {{#if secretaris}}
     <li>
-      <span property={{propertyToUse}} resource={{secretaris.uri}}>{{secretaris.fullName}}</span>
+      <span property="besluit:heeftSecretaris" resource={{secretaris.uri}}>{{secretaris.fullName}} (secretaris)</span>
     </li>
   {{/if}}
   <li>
