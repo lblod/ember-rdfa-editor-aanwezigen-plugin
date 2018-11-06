@@ -14,7 +14,7 @@
     </li>
   {{/if}}
   <li>
-    {{#each overigeAanwezigen as |aanwezige|}}
+    {{#each sortedAanwezigen as |aanwezige|}}
       {{#with-rdfa-resource resource=aanwezige as |ctx|}}
         {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}}
       {{/with-rdfa-resource}}
