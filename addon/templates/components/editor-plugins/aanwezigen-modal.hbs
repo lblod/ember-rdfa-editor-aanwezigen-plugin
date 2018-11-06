@@ -8,7 +8,11 @@
 </div>
 <div>
   <h1>Overige aanwezigen</h1>
-  {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
+  {{#if loadData.isRunning}}
+    <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+  {{else}}
+    {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
+  {{/if}}
 </div>
 {{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
   voorzitter=voorzitter
