@@ -9,5 +9,5 @@
    selected=_persoon
    onchange=(action "select")
    as |persoon|}}
-  {{persoon.gebruikteVoornaam}} {{persoon.achternaam}}, geboortedatum: {{moment-format persoon.geboorte.datum 'DD/MM/YYYY'}}
+  {{persoon.gebruikteVoornaam}} {{persoon.achternaam}}, {{moment-format persoon.geboorte.datum 'DD/MM/YYYY'}}
 {{/power-select}}
