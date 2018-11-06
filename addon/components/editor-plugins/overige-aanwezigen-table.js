@@ -19,6 +19,7 @@ export default Component.extend({
 
     set(k, v){
       this._aanwezigen.pushObject(v);
+      this.aanwezigen.pushObject(v.persoon);
     }
   }),
 
@@ -94,7 +95,6 @@ export default Component.extend({
       if(!this.newAanwezige)
         return;
       this.overigeAanwezigen.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
-      this.aanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
