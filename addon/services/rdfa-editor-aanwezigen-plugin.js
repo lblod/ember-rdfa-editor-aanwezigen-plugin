@@ -141,7 +141,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     let location = context.region;
     if(instructiveTriple.predicate == this.aanwezigenTable){
       location = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
-      options.noHighlight=true;
+      options.noHighlight = true;
       options.editMode = true;
     }
     hints.push({text, location, domNode, instructiveUri: instructiveTriple.predicate, options});

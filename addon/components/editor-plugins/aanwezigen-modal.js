@@ -41,10 +41,18 @@ export default Component.extend({
     }
   },
 
+  fetchDataFromPrevious(){
+    let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
+    if(previousTables.length > 0)
+      return previousTables[0];
+    return null;
+  },
+
   loadData: task(function* (){
-    if(!this.domTable)
-      return;
-    let triples = this.serializeTableToTriples(this.domTable);
+    let domData = this.fetchDataFromPrevious();
+    if(this.editTable)
+      domData = this.domTable;
+    let triples = this.serializeTableToTriples(domData);
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);

@@ -1,3 +1,5 @@
+{{#if aanwezigenBijAgendapunt}}
+<!-- @MIET: if you want to customize -->
 <ul class="bullet-list">
   {{#if voorzitter}}
     <li>
@@ -12,6 +14,25 @@
   <li>
     {{#each sortedAanwezigen as |aanwezige|}}
       <span property={{propertyToUse}} resource={{aanwezige.uri}}>{{aanwezige.fullName}}</span>, &nbsp;
-  {{/each}}
+    {{/each}}
   </li>
 </ul>
+{{else}}
+  <ul class="bullet-list">
+    {{#if voorzitter}}
+      <li>
+        <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}}>{{voorzitter.fullName}} (voorzitter)</span>
+      </li>
+    {{/if}}
+    {{#if secretaris}}
+      <li>
+        <span property="besluit:heeftSecretaris" resource={{secretaris.uri}}>{{secretaris.fullName}} (secretaris)</span>
+      </li>
+    {{/if}}
+    <li>
+      {{#each sortedAanwezigen as |aanwezige|}}
+        <span property={{propertyToUse}} resource={{aanwezige.uri}}>{{aanwezige.fullName}}</span>, &nbsp;
+    {{/each}}
+    </li>
+  </ul>
+{{/if}}

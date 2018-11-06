@@ -7,8 +7,6 @@ import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 
-
-
 /**
 * Card displaying a hint of the Date plugin
 *

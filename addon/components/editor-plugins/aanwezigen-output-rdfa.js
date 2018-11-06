@@ -5,6 +5,10 @@ import { computed } from '@ember/object';
 export default Component.extend({
   layout,
 
+  aanwezigenBijAgendapunt: computed('propertyToUse', function(){
+    return this.propertyToUse == 'besluit:heeftAanwezigeBijStart';
+  }),
+
   sortedAanwezigen: computed('overigeAanwezigen', function(){
     return this.overigeAanwezigen.sort(this.sortPersoon);
   }),
