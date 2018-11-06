@@ -35,12 +35,14 @@ export default Component.extend({
   },
 
   async setOverigeAanwezigen(triples){
+    let overigeAanwezigen = A();
     let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
                                 || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart');
     for(let triple of subset){
       let persoon = (await this.store.query('persoon', { 'filter[:uri:]': triple.object })).firstObject;
-      this.overigeAanwezigen.pushObject(persoon);
+      overigeAanwezigen.pushObject(persoon);
     }
+     this.set('overigeAanwezigen', overigeAanwezigen);
   },
 
   fetchDataFromPrevious(){
@@ -62,7 +64,6 @@ export default Component.extend({
 
   didReceiveAttrs(){
     this._super(...arguments);
-    this.set('overigeAanwezigen', A());
     this.loadData.perform();
   },
 

@@ -10,6 +10,8 @@ export default Component.extend({
   }),
 
   sortedAanwezigen: computed('overigeAanwezigen', function(){
+    if(!this.overigeAanwezigen)
+      return [];
     return this.overigeAanwezigen.sort(this.sortPersoon);
   }),
 
