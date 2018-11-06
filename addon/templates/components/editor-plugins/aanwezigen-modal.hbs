@@ -1,15 +1,27 @@
-<div style="height: 75px;">
-  <h1>Selecteer voorzitter</h1>
-  {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
+<div class="u-spacer">
+  <div class="grid">
+    <div class="col--6-12">
+      <label>
+        Selecteer voorzitter
+        {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
+      </label>
+    </div>
+    <div class="col--6-12">
+      <label>
+        Selecteer secretaris
+        {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
+      </label>
+    </div>
+  </div>
 </div>
-<div style="height: 75px;">
-  <h1>Selecteer secretaris</h1>
-  {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
-</div>
+
 <div>
-  <h1>Overige aanwezigen</h1>
-  {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
+  <label>Geef overige aanwezigen in</label>
+  <div class="u-spacer--tb--tiny">
+    {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
+  </div>
 </div>
+
 {{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
   voorzitter=voorzitter
   secretaris=secretaris

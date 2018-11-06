@@ -11,7 +11,7 @@
         {{/if}}
       {{else}}
         <p class="u-spacer--tiny">
-          Gelieve eerste een bestuursorgaan te selecteren (bovenaan het document).
+          Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de aanwezigen invoert.
         </p>
       {{/if}}
     </div>
@@ -22,7 +22,7 @@
   {{#wu-button-group}}
     {{#if bestuursorgaanUri}}
       {{wu-button
-        label="Ga naar tabel"
+        label="Beheer aanwezigen"
         isNarrow=true
         onClick=(action "togglePopup")
       }}
@@ -32,12 +32,11 @@
 
 {{# if popup}}
   {{#wu-modal
-     title="Beheer aanwezigen."
+     title="Beheer aanwezigen"
      dialog-class="modal-dialog--wide modal-dialog--sectioned"
-     dialog-content-class="modal-dialog__content--sectioned"
      onClose=(action 'togglePopup')
      as |m|}}
-    {{#m.content isSectioned=true}}
+    {{#m.content isSectioned=false}}
       {{editor-plugins/aanwezigen-modal
         bestuurseenheid=bestuurseenheid
         bestuursorgaan=bestuursorgaan
@@ -50,7 +49,7 @@
     {{/m.content}}
     <div class="modal-dialog__footer">
       {{#wu-button-group}}
-        {{wu-button label="Voeg tabel in" class="button button--narrow" onClick=(action 'insert')}}
+        {{wu-button label="Voeg aanwezigen in" class="button button--narrow" onClick=(action 'insert')}}
         {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
       {{/wu-button-group}}
     </div>
