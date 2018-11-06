@@ -1,1 +1,23 @@
-{{yield}}
+<ul class="bullet-list">
+  {{#if voorzitter}}
+      <li>
+      {{#with-rdfa-resource resource=voorzitter as |ctx|}}
+        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}} (voorzitter)
+      {{/with-rdfa-resource}}
+      </li>
+  {{/if}}
+  {{#if secretaris}}
+    <li>
+      {{#with-rdfa-resource resource=secretaris as |ctx|}}
+        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}} (secretaris)
+      {{/with-rdfa-resource}}
+    </li>
+  {{/if}}
+  <li>
+    {{#each overigeAanwezigen as |aanwezige|}}
+      {{#with-rdfa-resource resource=aanwezige as |ctx|}}
+        {{ctx.prop p="gebruikteVoornaam"}} {{ctx.prop  p="achternaam"}}
+      {{/with-rdfa-resource}}
+  {{/each}}
+  </li>
+</ul>

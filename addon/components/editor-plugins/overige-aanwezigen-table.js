@@ -10,7 +10,7 @@ export default Component.extend({
   verkozenGevolgUri: 'http://data.vlaanderen.be/id/concept/VerkiezingsresultaatGevolgCode/89498d89-6c68-4273-9609-b9c097727a0f',
   store: service(),
 
-  overigeAanwezigen: computed('aanwezigen', '_aanwezigen.[]', {
+  overigeAanwezigen: computed('aanwezigen','overigeAanwezigen.[]', {
     get(){
       this.mergeAanwezigeStatus(this.aanwezigen, this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
@@ -18,8 +18,10 @@ export default Component.extend({
     },
 
     set(k, v){
-      this._aanwezigen.pushObject(v);
-      this.aanwezigen.pushObject(v.persoon);
+      this.set('_aanwezigen', v);
+      this.mergeAanwezigeStatus(this.aanwezigen, this._aanwezigen);
+      this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
+      return this._aanwezigen;
     }
   }),
 
@@ -53,7 +55,7 @@ export default Component.extend({
                      });
 
     let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
-    this.set('_aanwezigen' , aanwezigen);
+    this.set('overigeAanwezigen' , aanwezigen);
   }),
 
   didReceiveAttrs(){
@@ -95,6 +97,7 @@ export default Component.extend({
       if(!this.newAanwezige)
         return;
       this.overigeAanwezigen.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
+      this.aanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
@@ -106,9 +109,10 @@ export default Component.extend({
     },
 
     toggleAanwezigheid(status, persoon){
-      if(status)
+      if(!status)
         this.aanwezigen.removeObject(persoon);
-      this.aanwezigen.pushObject(persoon);
+      else
+        this.aanwezigen.pushObject(persoon);
     }
   }
 
