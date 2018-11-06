@@ -13,6 +13,8 @@ export default Component.extend({
   serializeTableToTriples(table){
     const contextScanner = RdfaContextScanner.create({});
     const contexts = contextScanner.analyse(table).map((c) => c.context);
+    if(contexts.length == 0)
+      return [];
     return Array.concat(...contexts);
   },
 
