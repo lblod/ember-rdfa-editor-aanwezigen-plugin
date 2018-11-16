@@ -37,9 +37,11 @@ export default Component.extend({
   async setOverigeAanwezigen(triples){
     let overigeAanwezigen = A();
     let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
-                                || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart');
-    for(let triple of subset){
-      let persoon = (await this.store.query('persoon', { 'filter[:uri:]': triple.object })).firstObject;
+                                || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
+          .map(t =>  t.object);
+    subset = Array.from(new Set(subset));
+    for(let uri of subset){
+      let persoon = (await this.store.query('persoon', { 'filter[:uri:]': uri })).firstObject;
       overigeAanwezigen.pushObject(persoon);
     }
      this.set('overigeAanwezigen', overigeAanwezigen);
