@@ -2,17 +2,41 @@
 <ul class="bullet-list">
   {{#if voorzitter}}
     <li>
-      <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}}>{{voorzitter.fullName}} (voorzitter)</span>
+      <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{voorzitter.gebruikteVoornaam}}
+        </span>
+        <span property="persoon:achternaam">
+          {{voorzitter.achternaam}}
+        </span>
+        (voorzitter)
+      </span>
     </li>
   {{/if}}
   {{#if secretaris}}
     <li>
-      <span property="besluit:heeftSecretaris" resource={{secretaris.uri}}>{{secretaris.fullName}} (secretaris)</span>
+      <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
+        {{secretaris.fullName}}
+        <span property="persoon:gebruikteVoornaam">
+          {{secretaris.gebruikteVoornaam}}
+        </span>
+        <span property="persoon:achternaam">
+          {{secretaris.achternaam}}
+        </span>
+        (voorzitter)
+      </span>
     </li>
   {{/if}}
   <li>
     {{#each sortedAanwezigen as |aanwezige|}}
-      <span property={{propertyToUse}} resource={{aanwezige.uri}}>{{aanwezige.fullName}}</span>, &nbsp;
+      <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{aanwezige.gebruikteVoornaam}}
+        </span>
+        <span property="persoon:achternaam">
+          {{aanwezige.achternaam}}
+        </span>
+      </span>, &nbsp;
     {{/each}}
   </li>
 </ul>
@@ -20,17 +44,41 @@
   <ul class="bullet-list">
     {{#if voorzitter}}
       <li>
-        <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}}>{{voorzitter.fullName}} (voorzitter)</span>
+        <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{voorzitter.gebruikteVoornaam}}
+          </span>
+          <span property="persoon:achternaam">
+            {{voorzitter.achternaam}}
+          </span>
+          (voorzitter)
+        </span>
       </li>
     {{/if}}
     {{#if secretaris}}
       <li>
-        <span property="besluit:heeftSecretaris" resource={{secretaris.uri}}>{{secretaris.fullName}} (secretaris)</span>
+         <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
+          {{secretaris.fullName}}
+          <span property="persoon:gebruikteVoornaam">
+            {{secretaris.gebruikteVoornaam}}
+          </span>
+          <span property="persoon:achternaam">
+            {{secretaris.achternaam}}
+          </span>
+          (voorzitter)
+        </span>
       </li>
     {{/if}}
     <li>
       {{#each sortedAanwezigen as |aanwezige|}}
-        <span property={{propertyToUse}} resource={{aanwezige.uri}}>{{aanwezige.fullName}}</span>, &nbsp;
+        <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{aanwezige.gebruikteVoornaam}}
+          </span>
+          <span property="persoon:achternaam">
+            {{aanwezige.achternaam}}
+          </span>
+        </span>, &nbsp;
     {{/each}}
     </li>
   </ul>
