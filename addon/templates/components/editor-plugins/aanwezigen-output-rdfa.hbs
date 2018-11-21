@@ -1,5 +1,6 @@
 {{#if aanwezigenBijAgendapunt}}
-<ul class="bullet-list smaller">
+<!-- Aanwezigen -->
+<ul class="bullet-list">
   {{#if voorzitter}}
     <li>Voorzitter:&nbsp;
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
@@ -38,7 +39,7 @@
   {{/if}}
 </ul>
 {{else}}
-  <ul class="bullet-list">
+  <ul class="bullet-list smaller">
     {{#if voorzitter}}
       <li>Voorzitter:&nbsp;
         <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
@@ -77,3 +78,5 @@
     {{/if}}
   </ul>
 {{/if}}
+<!-- Afwezigen met kennisgeving -->
+<!-- Afwezigen zonder kennisgeving -->
