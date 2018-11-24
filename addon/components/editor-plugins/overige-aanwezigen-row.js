@@ -4,7 +4,7 @@ import layout from '../../templates/components/editor-plugins/overige-aanwezigen
 export default Component.extend({
   layout,
   tagName: 'tr',
-  
+
   didReceiveAttrs(){
     this._super(...arguments);
     this.set('aanwezig', this.aanwezige.aanwezig || false);

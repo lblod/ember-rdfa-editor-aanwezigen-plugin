@@ -7,7 +7,6 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   layout,
-  verkozenGevolgUri: 'http://data.vlaanderen.be/id/concept/VerkiezingsresultaatGevolgCode/89498d89-6c68-4273-9609-b9c097727a0f',
   store: service(),
 
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
@@ -26,34 +25,7 @@ export default Component.extend({
   }),
 
   loadData: task(function *(){
-    let personen = yield this.store.query('persoon',
-                     {
-                       filter: {
-                         'is-kandidaat-voor': {
-                           'rechtstreekse-verkiezing': {
-                             'stelt-samen': {
-                               ':uri:': this.bestuursorgaan.uri
-                             }
-                           }
-                         },
-                         'verkiezingsresultaten': {
-                           'gevolg': {
-                             ':uri:': this.verkozenGevolgUri
-                           },
-                           'is-resultaat-voor': {
-                             'rechtstreekse-verkiezing': {
-                               'stelt-samen': {
-                                 ':uri:': this.bestuursorgaan.uri
-                               }
-                             }
-                           }
-                         }
-                       },
-                       include: 'verkiezingsresultaten,is-kandidaat-voor,geboorte',
-                       page: { size: 1000 },
-                       sort:'gebruikte-voornaam'
-                     });
-
+    let personen = this.cachedPersonen;
     let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
     if(this.overigeAanwezigen.length == 0){
       aanwezigen.forEach(a => a.aanwezig = true);

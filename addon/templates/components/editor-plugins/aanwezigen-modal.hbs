@@ -20,9 +20,11 @@
   {{#if loadData.isRunning}}
     <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
   {{else}}
-    <div class="u-spacer--tb--tiny">
-      {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan}}
-    </div>
+    {{#if tableDataReady}}
+      <div class="u-spacer--tb--tiny">
+        {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen}}
+      </div>
+    {{/if}}
   {{/if}}
 </div>
 
