@@ -100,6 +100,8 @@ export default Component.extend({
   fetchDataFromPrevious(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
+      // if you decide to change the node to parse for triples, be aware of potential performance consequences
+      // if you still use the abused ContextScanner #metoo
       return previousTables[0];
     return null;
   },
