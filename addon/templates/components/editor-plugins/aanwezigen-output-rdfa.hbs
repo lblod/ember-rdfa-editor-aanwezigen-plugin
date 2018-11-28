@@ -2,7 +2,7 @@
 <!-- Aanwezigen -->
 <ul class="bullet-list">
   {{#if voorzitter}}
-    <li>Voorzitter:&nbsp;
+    <li>Voorzitter van de zitting:&nbsp;
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
           {{voorzitter.gebruikteVoornaam}}
@@ -13,7 +13,7 @@
       </span>
     </li>
   {{/if}}
-  <li>Gemeenteraadsleden:&nbsp;
+  <li>&nbsp;
     {{#each sortedAanwezigen as |aanwezige|}}
       <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
@@ -26,7 +26,7 @@
     {{/each}}
   </li>
   {{#if secretaris}}
-    <li>Algemeen directeur:&nbsp;
+    <li>Secretaris van de zitting:&nbsp;
       <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
           {{secretaris.gebruikteVoornaam}}
@@ -41,7 +41,7 @@
 {{else}}
   <ul class="bullet-list smaller">
     {{#if voorzitter}}
-      <li>Voorzitter:&nbsp;
+      <li>Voorzitter van de zitting:&nbsp;
         <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
           <span property="persoon:gebruikteVoornaam">
             {{voorzitter.gebruikteVoornaam}}
@@ -52,7 +52,7 @@
         </span>
       </li>
     {{/if}}
-    <li>Gemeenteraadsleden:&nbsp;
+    <li>&nbsp;
       {{#each sortedAanwezigen as |aanwezige|}}
         <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
           <span property="persoon:gebruikteVoornaam">
@@ -65,7 +65,7 @@
     {{/each}}
     </li>
     {{#if secretaris}}
-      <li>Algemeen directeur:&nbsp;
+      <li>Secretaris van de zitting:&nbsp;
          <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
           <span property="persoon:gebruikteVoornaam">
             {{secretaris.gebruikteVoornaam}}
