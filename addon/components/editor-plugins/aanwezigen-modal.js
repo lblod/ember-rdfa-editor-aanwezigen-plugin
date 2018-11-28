@@ -76,11 +76,19 @@ export default Component.extend({
   },
 
   async setSecretaris(triples){
-    let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
+    // This is temporarily disabled, since we don't have the data yet
+
+    // let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
+    // if(!triple)
+    //   return;
+    // let persoon = await this.smartFetchPersoon(triple.object);
+
+    //for now it is just free text field
+    let triple = triples.find(t => t.predicate == 'http://mu.semte.ch/vocabularies/ext/secretarisTemporaryAsText');
     if(!triple)
       return;
-    let persoon = await this.smartFetchPersoon(triple.object);
-    this.set('secretaris', persoon);
+
+    this.set('secretaris', triple.object.trim());
   },
 
   async setOverigeAanwezigen(triples){
@@ -100,7 +108,7 @@ export default Component.extend({
   fetchDataFromPrevious(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
-      // if you decide to change the node to parse for triples, be aware of potential performance consequences
+      // if you decide to change the node to parse for triples, be aware of potential performance consequences,
       // if you still use the abused ContextScanner #metoo
       return previousTables[0];
     return null;

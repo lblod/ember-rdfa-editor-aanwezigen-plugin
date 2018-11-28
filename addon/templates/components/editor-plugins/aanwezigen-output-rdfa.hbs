@@ -27,6 +27,7 @@
   </li>
   {{#if secretaris}}
     <li>Secretaris van de zitting:&nbsp;
+      {{!-- For now disabled until we have data
       <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
           {{secretaris.gebruikteVoornaam}}
@@ -34,6 +35,10 @@
         <span property="foaf:familyName">
           {{secretaris.achternaam}}
         </span>
+      </span>
+      --}}
+      <span property="ext:secretarisTemporaryAsText">
+        {{secretaris}}
       </span>
     </li>
   {{/if}}
@@ -62,17 +67,22 @@
             {{aanwezige.achternaam}}
           </span>
         </span>, &nbsp;
-    {{/each}}
+      {{/each}}
     </li>
     {{#if secretaris}}
       <li>Secretaris van de zitting:&nbsp;
-         <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
+        {{!-- For now disabled until we have data
+          <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
           <span property="persoon:gebruikteVoornaam">
-            {{secretaris.gebruikteVoornaam}}
+          {{secretaris.gebruikteVoornaam}}
           </span>
           <span property="foaf:familyName">
-            {{secretaris.achternaam}}
+          {{secretaris.achternaam}}
           </span>
+          </span>
+          --}}
+        <span property="ext:secretarisTemporaryAsText">
+          {{secretaris}}
         </span>
       </li>
     {{/if}}

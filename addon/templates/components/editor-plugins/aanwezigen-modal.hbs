@@ -9,7 +9,12 @@
     <div class="col--6-12">
       <label>
         Selecteer secretaris van de zitting
+        {{input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
+          value=(mut secretaris) placeholder="Geef hier een naam op."
+        }}
+        {{!-- disable unitil data
         {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
+        --}}
       </label>
     </div>
   </div>
