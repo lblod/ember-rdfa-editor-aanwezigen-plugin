@@ -89,7 +89,7 @@ export default Component.extend({
 
     toggleAanwezigheid(status, persoon){
       if(!status){
-        //todo: rethink this
+        //todo: rethink this: persoon is a proxy here. 
         let p = this.overigeAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
         this.overigeAanwezigen.removeObject(p);
       }
