@@ -44,7 +44,7 @@ export default Component.extend({
 
   mergeAanwezigeStatus(recievedAanwezigen, buildAanwezigen){
     for(let persoon of recievedAanwezigen){
-      let bAanwezige = buildAanwezigen.find(b => persoon.uri == b.persoon.uri);
+      let bAanwezige = buildAanwezigen.find(b => persoon.get('uri') == b.persoon.get('uri'));
       if(bAanwezige)
         bAanwezige['aanwezig'] = true;
       else
@@ -55,9 +55,9 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    if(a.persoon.gebruikteVoornaam < b.persoon.gebruikteVoornaam)
+    if(a.persoon.get('gebruikteVoornaam') < b.persoon.get('gebruikteVoornaam'))
       return -1;
-    if (a.persoon.gebruikteVoornaam > b.persoon.gebruikteVoornaam)
+    if (a.persoon.get('gebruikteVoornaam') > b.persoon.get('gebruikteVoornaam'))
       return 1;
     return 0;
   },
