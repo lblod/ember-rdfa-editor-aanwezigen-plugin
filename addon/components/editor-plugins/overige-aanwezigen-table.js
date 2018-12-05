@@ -31,7 +31,7 @@ export default Component.extend({
       aanwezigen.forEach(a => a.aanwezig = true);
       this.overigeAanwezigen.setObjects(aanwezigen.map(a =>  a.persoon));
     }
-
+ 
     this.set('aanwezigenToSelect', aanwezigen);
   }),
 
@@ -88,8 +88,11 @@ export default Component.extend({
     },
 
     toggleAanwezigheid(status, persoon){
-      if(!status)
-        this.overigeAanwezigen.removeObject(persoon);
+      if(!status){
+        //todo: rethink this
+        let p = this.overigeAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
+        this.overigeAanwezigen.removeObject(p);
+      }
       else
         this.overigeAanwezigen.pushObject(persoon);
     }
