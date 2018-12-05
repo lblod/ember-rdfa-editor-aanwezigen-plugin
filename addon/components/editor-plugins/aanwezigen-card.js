@@ -69,7 +69,12 @@ export default Component.extend({
   },
 
   createWrappingHTML(innerHTML){
-    return `<div property="ext:aanwezigenTable">${innerHTML}</div>`;
+    //workaround for triggering updates
+    return `<div property="ext:aanwezigenTable">
+                    <span class="u-hidden">${new Date().toISOString()}</span>
+                    ${innerHTML}
+                    <span class="u-hidden">${new Date().toISOString() + '1'}</span>
+            </div>`;
   },
 
   loadData: task(function *(){
