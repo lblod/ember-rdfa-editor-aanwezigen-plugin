@@ -1,5 +1,22 @@
 <div class="u-spacer">
   <div class="grid">
+    <div class="col--12-12 u-align--right">
+      {{#unless (is-equal viewMode 'default')}}
+        {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
+          <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
+        {{/wu-link-button}}
+      {{else}}
+        {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
+          <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
+        {{/wu-link-button}}
+      {{/unless}}
+    </div>
+  </div>
+</div>
+
+{{#if (is-equal viewMode 'default')}}
+<div class="u-spacer">
+  <div class="grid">
     <div class="col--6-12">
       <label>
         Selecteer voorzitter van de zitting
@@ -39,4 +56,9 @@
   overigeAanwezigen=overigeAanwezigen
   propertyToUse=propertyToUse
 }}
+{{/if}}
 {{yield}}
+
+{{#if (is-equal viewMode 'createPerson')}}
+  {{aanwezigen-plugin/create-person onCancel=(action 'cancelCreatePerson') onCreate=(action 'finishCreatePerson')}}
+{{/if}}

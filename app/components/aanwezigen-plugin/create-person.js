@@ -1,0 +1,1 @@
+export { default } from '@lblod/ember-rdfa-editor-aanwezigen-plugin/components/aanwezigen-plugin/create-person';
