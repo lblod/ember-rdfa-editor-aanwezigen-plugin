@@ -49,6 +49,14 @@
     {{/if}}
   {{/if}}
 </div>
+{{/if}}
+{{yield}}
+
+{{#if (is-equal viewMode 'createPerson')}}
+  {{aanwezigen-plugin/create-person onCancel=(action 'cancelCreatePerson') onCreate=(action 'finishCreatePerson')}}
+{{/if}}
+
+
 
 {{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
   voorzitter=voorzitter
@@ -56,9 +64,5 @@
   overigeAanwezigen=overigeAanwezigen
   propertyToUse=propertyToUse
 }}
-{{/if}}
-{{yield}}
 
-{{#if (is-equal viewMode 'createPerson')}}
-  {{aanwezigen-plugin/create-person onCancel=(action 'cancelCreatePerson') onCreate=(action 'finishCreatePerson')}}
-{{/if}}
+fel
