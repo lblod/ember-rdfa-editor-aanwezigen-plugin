@@ -4,11 +4,11 @@
   {{#if voorzitter}}
     <li>Voorzitter van de zitting:&nbsp;
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
-        <span property="foaf:familyName">
-          {{voorzitter.achternaam}},
-        </span>
         <span property="persoon:gebruikteVoornaam">
           {{voorzitter.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{voorzitter.achternaam}}
         </span>
       </span>
     </li>
@@ -16,11 +16,11 @@
   <li>&nbsp;
     {{#each sortedAanwezigen as |aanwezige|}}
       <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
-        <span property="foaf:familyName">
-          {{aanwezige.achternaam}},
-        </span>
         <span property="persoon:gebruikteVoornaam">
           {{aanwezige.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{aanwezige.achternaam}}
         </span>
       </span>, &nbsp;
     {{/each}}
@@ -48,11 +48,11 @@
     {{#if voorzitter}}
       <li>Voorzitter van de zitting:&nbsp;
         <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
-          <span property="foaf:familyName">
-            {{voorzitter.achternaam}},
-          </span>
           <span property="persoon:gebruikteVoornaam">
             {{voorzitter.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{voorzitter.achternaam}}
           </span>
         </span>
       </li>
@@ -60,11 +60,11 @@
     <li>&nbsp;
       {{#each sortedAanwezigen as |aanwezige|}}
         <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
-          <span property="foaf:familyName">
-            {{aanwezige.achternaam}},
-          </span>
           <span property="persoon:gebruikteVoornaam">
             {{aanwezige.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{aanwezige.achternaam}}
           </span>
         </span>, &nbsp;
       {{/each}}
