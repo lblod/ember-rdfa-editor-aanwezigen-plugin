@@ -55,11 +55,7 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    if(a.persoon.get('gebruikteVoornaam') < b.persoon.get('gebruikteVoornaam'))
-      return -1;
-    if (a.persoon.get('gebruikteVoornaam') > b.persoon.get('gebruikteVoornaam'))
-      return 1;
-    return 0;
+    return a.persoon.get('achternaam').trim().localeCompare(b.persoon.get('achternaam').trim());
   },
 
   actions:{

@@ -9,7 +9,7 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('sort', ['gebruikteVoornaam']);
+    this.set('sort', ['achternaam']);
     this.set('overigeAanwezigen', A());
   },
   aanwezigenBijAgendapunt: computed('propertyToUse', function(){
