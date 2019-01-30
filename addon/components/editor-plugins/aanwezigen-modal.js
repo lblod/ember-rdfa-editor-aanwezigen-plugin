@@ -4,7 +4,6 @@ import { A } from '@ember/array';
 import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import Persoon from '../../models/persoon';
 
 export default Component.extend({
   layout,
@@ -13,7 +12,7 @@ export default Component.extend({
   viewMode: 'default',
 
   async setCachedPersonen(){
-    //a subset of peronen of interest
+    //a subset of personen of interest
     let resultaten = await this.store.query('verkiezingsresultaat',
                      {
                        filter: {
@@ -32,6 +31,7 @@ export default Component.extend({
                        page: { size: 1000 },
                        sort:'is-resultaat-van.gebruikte-voornaam'
                      });
+
     this.set('cachedPersonen', resultaten.map((res) => res.isResultaatVan) || A());
   },
 
@@ -47,9 +47,33 @@ export default Component.extend({
 
    //set cache so it may be found later
    this.cachedPersonen.pushObject(persoon);
+
    return persoon;
   },
 
+  async setCachedMandatarissen(){
+    //a subset of mandatarissen of interest
+
+    // Get all the mandatarissen linked to the cached persons
+    let mandatarissen = A();
+    await Promise.all(this.cachedPersonen.map(async (person) => {
+      const personsMandatarissen = await person.get('isAangesteldAls');
+      personsMandatarissen.forEach((item) => {
+        mandatarissen.pushObject(item);
+      });
+    }));
+
+    // Only keep the mandatarissen that are in the right time period
+    const mandatarissenInPeriode = A();
+    await Promise.all(mandatarissen.map(async (mandataris) => {
+      const bindingEinde = await this.bestuursorgaan.bindingEinde || new Date();
+      if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
+        mandatarissenInPeriode.pushObject(mandataris);
+      }
+    }));
+
+    this.set('cachedMandatarissen', mandatarissenInPeriode);
+  },
 
   serializeTableToTriples(table){
     const contextScanner = RdfaContextScanner.create({});
@@ -112,6 +136,7 @@ export default Component.extend({
       domData = this.domTable;
     let triples = this.serializeTableToTriples(domData);
     yield this.setCachedPersonen();
+    yield this.setCachedMandatarissen();
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);
@@ -131,7 +156,7 @@ export default Component.extend({
     selectSecretaris(persoon){
       this.set('secretaris', persoon);
     },
-    
+
     createPerson(){
       this.set('viewMode', 'createPerson');
     },
