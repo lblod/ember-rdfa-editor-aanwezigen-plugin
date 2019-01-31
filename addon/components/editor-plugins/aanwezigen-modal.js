@@ -54,24 +54,34 @@ export default Component.extend({
   async setCachedMandatarissen(){
     //a subset of mandatarissen of interest
 
-    // Get all the mandatarissen linked to the cached persons
-    let mandatarissen = A();
-    await Promise.all(this.cachedPersonen.map(async (person) => {
-      const personsMandatarissen = await person.get('isAangesteldAls');
-      personsMandatarissen.forEach((item) => {
-        mandatarissen.pushObject(item);
-      });
-    }));
+   let queryParams = {
+      include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
+      'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
+      page: { size: 10000 }
+   };
 
-    // Only keep the mandatarissen that are in the right time period
-    const mandatarissenInPeriode = A();
-    await Promise.all(mandatarissen.map(async (mandataris) => {
-      const bindingEinde = await this.bestuursorgaan.bindingEinde || new Date();
-      // if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
-      if(!((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde))) {
-        mandatarissenInPeriode.pushObject(mandataris);
-      }
-    }));
+
+    let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
+
+
+    // Get all the mandatarissen linked to the cached persons
+    // let mandatarissen = A();
+    // await Promise.all(this.cachedPersonen.map(async (person) => {
+    //   const personsMandatarissen = await person.get('isAangesteldAls');
+    //   personsMandatarissen.forEach((item) => {
+    //     mandatarissen.pushObject(item);
+    //   });
+    // }));
+
+    // // Only keep the mandatarissen that are in the right time period
+    // const mandatarissenInPeriode = A();
+    // await Promise.all(mandatarissen.map(async (mandataris) => {
+    //   const bindingEinde = await this.bestuursorgaan.bindingEinde || new Date();
+    //   // if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
+    //   if(!((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde))) {
+    //     mandatarissenInPeriode.pushObject(mandataris);
+    //   }
+    // }));
 
     this.set('cachedMandatarissen', mandatarissenInPeriode);
   },
