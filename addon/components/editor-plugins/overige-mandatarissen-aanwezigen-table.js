@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../templates/components/editor-plugins/overige-aanwezigen-table';
+import layout from '../../templates/components/editor-plugins/overige-mandatarissen-aanwezigen-table';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
@@ -25,17 +25,14 @@ export default Component.extend({
   }),
 
   loadData: task(function *(){
-    let personen = this.cachedPersonen;
     let mandatarissen = this.cachedMandatarissen;
-    if(mandatarissen.length == 0) {
-      let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
-      if(this.overigeAanwezigen.length == 0){
-        aanwezigen.forEach(a => a.aanwezig = true);
-        this.overigeAanwezigen.setObjects(aanwezigen.map(a =>  a.persoon));
-      }
-
-      this.set('aanwezigenToSelect', aanwezigen);
+    let aanwezigen = A( mandatarissen.map( mandataris => {return {'aanwezig': false, mandataris };}) );
+    if(this.overigeAanwezigen.length == 0){
+      aanwezigen.forEach(a => a.aanwezig = true);
+      this.overigeAanwezigen.setObjects(aanwezigen.map(a =>  a.mandataris));
     }
+
+    this.set('aanwezigenToSelect', aanwezigen);
   }),
 
   didReceiveAttrs(){
@@ -46,19 +43,22 @@ export default Component.extend({
   },
 
   mergeAanwezigeStatus(recievedAanwezigen, buildAanwezigen){
-    for(let persoon of recievedAanwezigen){
-      let bAanwezige = buildAanwezigen.find(b => persoon.get('uri') == b.persoon.get('uri'));
+    for(let mandataris of recievedAanwezigen){
+      let bAanwezige = buildAanwezigen.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
       if(bAanwezige)
         bAanwezige['aanwezig'] = true;
       else
-        buildAanwezigen.pushObject({ 'aanwezig': true, persoon });
+        buildAanwezigen.pushObject({ 'aanwezig': true, mandataris });
     }
 
     return buildAanwezigen;
   },
 
-  sortBuildAanwezige(a,b){
-    return a.persoon.get('achternaam').trim().localeCompare(b.persoon.get('achternaam').trim());
+  async sortBuildAanwezige(a,b){
+    const persoonA = await a.mandataris.get('isBestuurlijkeAliasVan');
+    const persoonB = await b.mandataris.get('isBestuurlijkeAliasVan');
+    
+    return await persoonA.get('achternaam').trim().localeCompare( await persoonB.get('achternaam').trim());
   },
 
   actions:{
@@ -67,14 +67,14 @@ export default Component.extend({
       this.set('addAanwezigeMode', true);
     },
 
-    selectAanwezige(persoon){
-      this.set('newAanwezige', persoon);
+    selectAanwezige(mandataris){
+      this.set('newAanwezige', mandataris);
     },
 
     addAanwezige(){
       if(!this.newAanwezige)
         return;
-      this.aanwezigenToSelect.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
+      this.aanwezigenToSelect.pushObject({ 'aanwezig': true, mandataris: this.newAanwezige });
       this.overigeAanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
@@ -86,14 +86,14 @@ export default Component.extend({
       this.set('addAanwezigeMode', false);
     },
 
-    toggleAanwezigheid(status, persoon){
+    toggleAanwezigheid(status, mandataris){
       if(!status){
         //todo: rethink this: persoon is a proxy here.
-        let p = this.overigeAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
+        let p = this.overigeAanwezigen.find(p => p.get('uri')  == mandataris.get('uri'));
         this.overigeAanwezigen.removeObject(p);
       }
       else
-        this.overigeAanwezigen.pushObject(persoon);
+        this.overigeAanwezigen.pushObject(mandataris);
     }
   }
 

@@ -67,7 +67,8 @@ export default Component.extend({
     const mandatarissenInPeriode = A();
     await Promise.all(mandatarissen.map(async (mandataris) => {
       const bindingEinde = await this.bestuursorgaan.bindingEinde || new Date();
-      if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
+      // if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
+      if(!((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde))) {
         mandatarissenInPeriode.pushObject(mandataris);
       }
     }));
@@ -109,16 +110,16 @@ export default Component.extend({
 
   async setOverigeAanwezigen(triples){
     let overigeAanwezigen = A();
-    let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
-                                || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
-          .map(t =>  t.object);
-    subset = Array.from(new Set(subset));
-    for(let uri of subset){
-      let persoon = await this.smartFetchPersoon(uri);
-      if(persoon)
-        overigeAanwezigen.pushObject(persoon);
-    }
-     this.set('overigeAanwezigen', overigeAanwezigen);
+    // let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
+    //                             || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
+    //       .map(t =>  t.object);
+    // subset = Array.from(new Set(subset));
+    // for(let uri of subset){
+    //   let persoon = await this.smartFetchPersoon(uri);
+    //   if(persoon)
+    //     overigeAanwezigen.pushObject(persoon);
+    // }
+    this.set('overigeAanwezigen', overigeAanwezigen);
   },
 
   fetchDataFromPrevious(){
@@ -129,6 +130,19 @@ export default Component.extend({
       return previousTables[0];
     return null;
   },
+
+
+
+/* DEMAIN :
+
+- Comprendre d'où viennent les noms qui sont inscrits dès le premier chargement
+- Mettre les mandats à la place
+- Si y'a pas de mandats mettre les personnes
+
+ */
+
+
+
 
   loadData: task(function* (){
     let domData = this.fetchDataFromPrevious();

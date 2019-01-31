@@ -44,7 +44,10 @@
   {{else}}
     {{#if tableDataReady}}
       <div class="u-spacer--tb--tiny">
-        {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen}}
+        {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
+      </div>
+      <div class="u-spacer--tb--tiny">
+        {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
     {{/if}}
   {{/if}}
