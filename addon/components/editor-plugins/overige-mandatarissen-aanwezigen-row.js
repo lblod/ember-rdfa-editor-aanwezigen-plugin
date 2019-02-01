@@ -9,8 +9,8 @@ export default Component.extend({
     this._super(...arguments);
     this.set('aanwezig', this.aanwezige.aanwezig || false);
     this.set('mandataris', this.aanwezige.mandataris);
-    this.set('persoon', await this.mandataris.get('isBestuurlijkeAliasVan'));
-    // this.set('functie', await this.mandataris.bekleedt.bestuursfunctie.label);
+    this.set('persoon', await this.mandataris.isBestuurlijkeAliasVan);
+    this.set('functie', await this.mandataris.bekleedt.get('bestuursfunctie').get('label'));
   },
 
   actions: {
