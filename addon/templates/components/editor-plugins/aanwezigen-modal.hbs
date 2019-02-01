@@ -5,10 +5,12 @@
         {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
           <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
         {{/wu-link-button}}
+      {{!-- hiding it because causing many issues
       {{else}}
         {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
           <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
         {{/wu-link-button}}
+      --}}
       {{/unless}}
     </div>
   </div>

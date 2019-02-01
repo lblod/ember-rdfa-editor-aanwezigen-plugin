@@ -57,7 +57,7 @@ export default Component.extend({
   async sortBuildAanwezige(a,b){
     const persoonA = await a.mandataris.get('isBestuurlijkeAliasVan');
     const persoonB = await b.mandataris.get('isBestuurlijkeAliasVan');
-    
+
     return await persoonA.get('achternaam').trim().localeCompare( await persoonB.get('achternaam').trim());
   },
 
@@ -67,8 +67,9 @@ export default Component.extend({
       this.set('addAanwezigeMode', true);
     },
 
-    selectAanwezige(mandataris){
+    async selectAanwezige(mandataris){
       this.set('newAanwezige', mandataris);
+      this.set('newAanwezigeFunctie', await mandataris.get('bekleedt').get('bestuursfunctie').get('label'));
     },
 
     addAanwezige(){
