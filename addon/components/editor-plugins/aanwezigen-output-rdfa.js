@@ -9,13 +9,16 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('sort', ['achternaam']);
-    this.set('overigeAanwezigen', A());
+    this.set('sortMandataris', ['isBestuurlijkeAliasVan.achternaam']);
+    this.set('sortPersoon', ['achternaam']);
+    this.set('overigePersonenAanwezigen', A());
+    this.set('overigeMandatarissenAanwezigen', A());
   },
+
   aanwezigenBijAgendapunt: computed('propertyToUse', function(){
     return this.propertyToUse == 'besluit:heeftAanwezigeBijStart';
   }),
 
-  sortedAanwezigen: sort('overigeAanwezigen', 'sort')
-
+  sortedMandatarissenAanwezigen: sort('overigeMandatarissenAanwezigen', 'sortMandataris'),
+  sortedPersonenAanwezigen: sort('overigePersonenAanwezigen', 'sortPersoon')
 });

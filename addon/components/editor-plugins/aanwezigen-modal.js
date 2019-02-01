@@ -53,37 +53,30 @@ export default Component.extend({
 
   async setCachedMandatarissen(){
     //a subset of mandatarissen of interest
-
-   let queryParams = {
+    let queryParams = {
       include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
       page: { size: 10000 }
-   };
-
+    };
 
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
-
-
-    // Get all the mandatarissen linked to the cached persons
-    // let mandatarissen = A();
-    // await Promise.all(this.cachedPersonen.map(async (person) => {
-    //   const personsMandatarissen = await person.get('isAangesteldAls');
-    //   personsMandatarissen.forEach((item) => {
-    //     mandatarissen.pushObject(item);
-    //   });
-    // }));
-
-    // // Only keep the mandatarissen that are in the right time period
-    // const mandatarissenInPeriode = A();
-    // await Promise.all(mandatarissen.map(async (mandataris) => {
-    //   const bindingEinde = await this.bestuursorgaan.bindingEinde || new Date();
-    //   // if((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde)) {
-    //   if(!((await mandataris.start >= await this.bestuursorgaan.bindingStart) && (await mandataris.einde <= bindingEinde))) {
-    //     mandatarissenInPeriode.pushObject(mandataris);
-    //   }
-    // }));
-
     this.set('cachedMandatarissen', mandatarissenInPeriode);
+  },
+
+  async smartFetchMandataris(subjectUri){
+    let mandataris = this.cachedMandatarissen.find(p => p.get('uri') == subjectUri);
+    if(mandataris)
+      return mandataris;
+    //if not existant try to create it on based on information in triples
+
+    mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri })).firstObject;
+    if(!mandataris)
+      return null;
+
+   //set cache so it may be found later
+   this.cachedMandatarissen.pushObject(mandataris);
+
+   return mandataris;
   },
 
   serializeTableToTriples(table){
@@ -119,17 +112,24 @@ export default Component.extend({
   },
 
   async setOverigeAanwezigen(triples){
-    let overigeAanwezigen = A();
-    // let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
-    //                             || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
-    //       .map(t =>  t.object);
-    // subset = Array.from(new Set(subset));
-    // for(let uri of subset){
-    //   let persoon = await this.smartFetchPersoon(uri);
-    //   if(persoon)
-    //     overigeAanwezigen.pushObject(persoon);
-    // }
-    this.set('overigeAanwezigen', overigeAanwezigen);
+    let overigePersonenAanwezigen = A();
+    let overigeMandatarissenAanwezigen = A();
+    let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
+                                || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
+          .map(t =>  t.object);
+    subset = Array.from(new Set(subset));
+    for(let uri of subset){
+      let mandataris = await this.smartFetchMandataris(uri);
+      if(mandataris)
+        overigeMandatarissenAanwezigen.pushObject(mandataris);
+
+      let persoon = await this.smartFetchPersoon(uri);
+      if(persoon)
+        overigePersonenAanwezigen.pushObject(persoon);
+    }
+
+    this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
+    this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
   },
 
   fetchDataFromPrevious(){
@@ -141,26 +141,15 @@ export default Component.extend({
     return null;
   },
 
-
-
-/* DEMAIN :
-
-- Comprendre d'où viennent les noms qui sont inscrits dès le premier chargement
-- Mettre les mandats à la place
-- Si y'a pas de mandats mettre les personnes
-
- */
-
-
-
-
   loadData: task(function* (){
     let domData = this.fetchDataFromPrevious();
     if(this.editTable)
       domData = this.domTable;
     let triples = this.serializeTableToTriples(domData);
-    yield this.setCachedPersonen();
     yield this.setCachedMandatarissen();
+    if(this.cachedMandatarissen.length == 0) {
+      yield this.setCachedPersonen();
+    }
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);

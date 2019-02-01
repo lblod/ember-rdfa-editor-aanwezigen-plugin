@@ -44,10 +44,10 @@
   {{else}}
     {{#if tableDataReady}}
       <div class="u-spacer--tb--tiny">
-        {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
+        {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
       <div class="u-spacer--tb--tiny">
-        {{editor-plugins/overige-aanwezigen-table overigeAanwezigen=overigeAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
+        {{editor-plugins/overige-aanwezigen-table overigePersonenAanwezigen=overigePersonenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
     {{/if}}
   {{/if}}
@@ -59,11 +59,10 @@
   {{aanwezigen-plugin/create-person onCancel=(action 'cancelCreatePerson') onCreate=(action 'finishCreatePerson')}}
 {{/if}}
 
-
-
 {{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
   voorzitter=voorzitter
   secretaris=secretaris
-  overigeAanwezigen=overigeAanwezigen
+  overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen
+  overigePersonenAanwezigen=overigePersonenAanwezigen
   propertyToUse=propertyToUse
 }}

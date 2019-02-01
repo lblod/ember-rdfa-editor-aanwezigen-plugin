@@ -11,14 +11,14 @@ export default Component.extend({
 
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
     get(){
-      this.mergeAanwezigeStatus(this.overigeAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     },
 
     set(k, v){
       this.set('_aanwezigen', v);
-      this.mergeAanwezigeStatus(this.overigeAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     }
@@ -29,9 +29,9 @@ export default Component.extend({
     let mandatarissen = this.cachedMandatarissen;
     if(mandatarissen.length == 0) {
       let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
-      if(this.overigeAanwezigen.length == 0){
+      if(this.overigePersonenAanwezigen.length == 0){
         aanwezigen.forEach(a => a.aanwezig = true);
-        this.overigeAanwezigen.setObjects(aanwezigen.map(a =>  a.persoon));
+        this.overigePersonenAanwezigen.setObjects(aanwezigen.map(a =>  a.persoon));
       }
 
       this.set('aanwezigenToSelect', aanwezigen);
@@ -41,7 +41,7 @@ export default Component.extend({
   didReceiveAttrs(){
     this._super(...arguments);
     this.set('_aanwezigen', A());
-    if(this.overigeAanwezigen)
+    if(this.overigePersonenAanwezigen)
       this.loadData.perform();
   },
 
@@ -75,7 +75,7 @@ export default Component.extend({
       if(!this.newAanwezige)
         return;
       this.aanwezigenToSelect.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
-      this.overigeAanwezigen.pushObject(this.newAanwezige);
+      this.overigePersonenAanwezigen.pushObject(this.newAanwezige);
 
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
@@ -89,11 +89,11 @@ export default Component.extend({
     toggleAanwezigheid(status, persoon){
       if(!status){
         //todo: rethink this: persoon is a proxy here.
-        let p = this.overigeAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
-        this.overigeAanwezigen.removeObject(p);
+        let p = this.overigePersonenAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
+        this.overigePersonenAanwezigen.removeObject(p);
       }
       else
-        this.overigeAanwezigen.pushObject(persoon);
+        this.overigePersonenAanwezigen.pushObject(persoon);
     }
   }
 
