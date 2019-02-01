@@ -36,11 +36,12 @@ export default Component.extend({
   },
 
   async smartFetchPersoon(subjectUri){
-    let persoon = this.cachedPersonen.find(p => p.get('uri') == subjectUri);
+    let persoon = null;
+    if(this.cachedPersonen) (persoon = this.cachedPersonen.find(p => p.get('uri') == subjectUri));
+
     if(persoon)
       return persoon;
     //if not existant try to create it on based on information in triples
-
     persoon = (await this.store.query('persoon', { 'filter[:uri:]': subjectUri })).firstObject;
     if(!persoon)
       return null;
