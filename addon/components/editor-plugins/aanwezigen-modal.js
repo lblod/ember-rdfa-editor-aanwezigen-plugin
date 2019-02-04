@@ -92,13 +92,8 @@ export default Component.extend({
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftVoorzitter');
     if(!triple)
       return;
-    if(this.cachedPersonen.length == 0) {
-      let mandataris = await this.smartFetchMandataris(triple.object);
-      this.set('voorzitter', mandataris);
-    } else {
-      let persoon = await this.smartFetchPersoon(triple.object);
-      this.set('voorzitter', persoon);
-    }
+    let persoon = await this.smartFetchPersoon(triple.object);
+    this.set('voorzitter', persoon);
   },
 
   async setSecretaris(triples){
@@ -107,13 +102,7 @@ export default Component.extend({
     // let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
     // if(!triple)
     //   return;
-    // if(this.cachedPersonen.length == 0) {
-    //   let mandataris = await this.smartFetchMandataris(triple.object);
-    //   this.set('voorzitter', mandataris);
-    // } else {
-    //   let persoon = await this.smartFetchPersoon(triple.object);
-    //   this.set('voorzitter', persoon);
-    // }
+    // let persoon = await this.smartFetchPersoon(triple.object);
 
     //for now it is just free text field
     let triple = triples.find(t => t.predicate == 'http://mu.semte.ch/vocabularies/ext/secretarisTemporaryAsText');
@@ -161,6 +150,8 @@ export default Component.extend({
     yield this.setCachedMandatarissen();
     if(this.cachedMandatarissen.length == 0) {
       yield this.setCachedPersonen();
+    } else {
+      this.set('cachedPersonen', A());
     }
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);

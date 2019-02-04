@@ -15,10 +15,10 @@ export default Component.extend({
   searchByName: task(function* (searchData) {
     yield timeout(300);
     let queryParams = {
-      include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
-      filter: searchData,
+      include: 'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
+      'filter[is-bestuurlijke-alias-van][achternaam]': searchData,
       page: { size: 100 },
-      sort:'is-bestuurlijke-alias-van.achternaam'
+      sort: 'is-bestuurlijke-alias-van.achternaam'
     };
 
     let mandatarissen = yield this.store.query('mandataris', queryParams);
