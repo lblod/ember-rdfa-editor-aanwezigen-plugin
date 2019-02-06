@@ -40,14 +40,15 @@
 </div>
 
 <div>
-  <label>Geef overige aanwezigen in</label>
   {{#if loadData.isRunning}}
     <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
   {{else}}
     {{#if tableDataReady}}
+      <label>Aanwezige mandatarissen</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
+      <label>Overige aanwezige</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-aanwezigen-table overigePersonenAanwezigen=overigePersonenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>

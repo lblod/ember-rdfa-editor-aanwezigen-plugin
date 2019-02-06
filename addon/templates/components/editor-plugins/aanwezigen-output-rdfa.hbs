@@ -16,11 +16,13 @@
   <li>&nbsp;
     {{#each sortedMandatarissenAanwezigen as |aanwezige|}}
       <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
-        <span property="persoon:gebruikteVoornaam">
-          {{aanwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-        </span>
-        <span property="foaf:familyName">
-          {{aanwezige.isBestuurlijkeAliasVan.achternaam}}
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{aanwezige.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{aanwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{aanwezige.isBestuurlijkeAliasVan.achternaam}}
+          </span>
         </span>
       </span>, &nbsp;
     {{/each}}
