@@ -1,32 +1,32 @@
-<div class="u-spacer">
-  <div class="grid">
-    <div class="col--12-12 u-align--right">
-      {{#unless (is-equal viewMode 'default')}}
-        {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
-          <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
-        {{/wu-link-button}}
-      {{!-- hiding it because causing many issues
-      {{else}}
-        {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
-          <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
-        {{/wu-link-button}}
-      --}}
-      {{/unless}}
-    </div>
-  </div>
-</div>
+{{#unless (is-equal viewMode 'default')}}
+	<div class="u-padding--round--tiny u-background--gray-lightest">
+	  {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
+	    <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
+	  {{/wu-link-button}}
+	{{!-- hiding it because causing many issues
+	{{else}}
+	  {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
+	    <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
+	  {{/wu-link-button}}
+	--}}
+	</div>
+{{/unless}}
 
 {{#if (is-equal viewMode 'default')}}
 <div class="u-spacer">
   <div class="grid">
     <div class="col--6-12">
-      <label>
+      <label class="form__label">
         Selecteer voorzitter van de zitting
         {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
       </label>
     </div>
+  </div>
+</div>
+<div class="u-spacer">
+  <div class="grid">
     <div class="col--6-12">
-      <label>
+      <label class="form__label">
         Selecteer secretaris van de zitting
         {{input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
           value=(mut secretaris) placeholder="Geef hier een naam op."
@@ -44,11 +44,12 @@
     <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
   {{else}}
     {{#if tableDataReady}}
-      <label>Aanwezige mandatarissen</label>
+      <label class="form__label">Aanwezige mandatarissen</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
-      <label>Overige aanwezige</label>
+      <br>
+      <label class="form__label">Overige aanwezige personen</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-aanwezigen-table overigePersonenAanwezigen=overigePersonenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
