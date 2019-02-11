@@ -40,9 +40,13 @@
           </td>
         </tr>
       {{/if}}
-      {{#each aanwezigenToSelect as |aanwezige|}}
-        {{editor-plugins/overige-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
-      {{/each}}
+      {{#if geenPersonen}}
+        <td colspan="3">Geen personen gevonden.</td>
+      {{else}}
+        {{#each aanwezigenToSelect as |aanwezige|}}
+          {{editor-plugins/overige-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
+        {{/each}}
+      {{/if}}
     {{/if}}
   </tbody>
 </table>

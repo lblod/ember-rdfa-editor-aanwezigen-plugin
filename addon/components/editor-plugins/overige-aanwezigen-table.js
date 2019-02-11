@@ -24,17 +24,23 @@ export default Component.extend({
     }
   }),
 
-  loadData: task(function *(){
+  loadData: task(function*() {
     let personen = this.cachedPersonen;
     let mandatarissen = this.cachedMandatarissen;
-    if(mandatarissen.length == 0) {
-      let aanwezigen = A( personen.map( persoon => {return {'aanwezig': false, persoon };}) );
-      if(this.overigePersonenAanwezigen.length == 0){
+    if (mandatarissen.length == 0) {
+      let aanwezigen = A(personen.map(persoon => {return {'aanwezig': false, persoon };}));
+      if (this.overigePersonenAanwezigen.length == 0) {
         aanwezigen.forEach(a => a.aanwezig = true);
-        this.overigePersonenAanwezigen.setObjects(aanwezigen.map(a =>  a.persoon));
+        this.overigePersonenAanwezigen.setObjects(aanwezigen.map(a => a.persoon));
       }
-
+      if(aanwezigen.length == 0) {
+        this.set('geenPersonen', true);
+      } else {
+        this.set('geenPersonen', false);
+      }
       this.set('aanwezigenToSelect', aanwezigen);
+    } else {
+      this.set('geenPersonen', true);
     }
   }),
 
