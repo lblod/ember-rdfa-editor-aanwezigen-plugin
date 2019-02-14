@@ -62,7 +62,7 @@ export default Component.extend({
     const persoonA = a.mandataris.isBestuurlijkeAliasVan;
     const persoonB = b.mandataris.isBestuurlijkeAliasVan;
 
-    return persoonA.get('achternaam').trim().localeCompare( persoonB.get('achternaam').trim());
+    return persoonA.get('achternaam').trim().localeCompare(persoonB.get('achternaam').trim());
   },
 
   actions:{

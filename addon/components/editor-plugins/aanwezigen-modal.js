@@ -55,13 +55,24 @@ export default Component.extend({
   async setCachedMandatarissen(){
     //a subset of mandatarissen of interest
     let queryParams = {
-      include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
+      include:'is-bestuurlijke-alias-van,is-bestuurlijke-alias-van.achternaam,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
       page: { size: 10000 }
     };
 
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
-    this.set('cachedMandatarissen', mandatarissenInPeriode);
+
+    this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
+
+    // This is broken : can't even get the firstObject or lastObject
+    // Then sortBuildAanwezige in overige-mandatarissen-aanwezigen-table is failing
+    // because of an undefined person (?!)
+
+    // console.log(mandatarissenInPeriode);
+    // console.log(this.cachedMandatarissen);
+    // console.log(this.cachedMandatarissen.firstObject);
+    // console.log(this.cachedMandatarissen.lastObject);
+
   },
 
   async smartFetchMandataris(subjectUri){
@@ -169,11 +180,7 @@ export default Component.extend({
       domData = this.domTable;
     let triples = this.serializeTableToTriples(domData);
     yield this.setCachedMandatarissen();
-    if(this.cachedMandatarissen.length == 0) {
-      yield this.setCachedPersonen();
-    } else {
-      this.set('cachedPersonen', A());
-    }
+    yield this.setCachedPersonen();
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);

@@ -40,7 +40,11 @@ export default Component.extend({
       }
       this.set('aanwezigenToSelect', aanwezigen);
     } else {
-      this.set('geenPersonen', true);
+      if (personen.length == 0) {
+        this.set('geenPersonen', true);
+      } else {
+        this.set('geenPersonen', false);
+      }
     }
   }),
 
