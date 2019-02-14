@@ -12,13 +12,18 @@ export default Component.extend({
     this.set('sortMandataris', ['isBestuurlijkeAliasVan.achternaam']);
     this.set('sortPersoon', ['achternaam']);
     this.set('overigePersonenAanwezigen', A());
+    this.set('overigePersonenAfwezigen', A());
     this.set('overigeMandatarissenAanwezigen', A());
+    this.set('overigeMandatarissenAfwezigen', A());
   },
 
   aanwezigenBijAgendapunt: computed('propertyToUse', function(){
     return this.propertyToUse == 'besluit:heeftAanwezigeBijStart';
   }),
 
+  sortedPersonenAanwezigen: sort('overigePersonenAanwezigen', 'sortPersoon'),
+  sortedPersonenAfwezigen: sort('overigePersonenAfwezigen', 'sortPersoon'),
   sortedMandatarissenAanwezigen: sort('overigeMandatarissenAanwezigen', 'sortMandataris'),
-  sortedPersonenAanwezigen: sort('overigePersonenAanwezigen', 'sortPersoon')
+  sortedMandatarissenAfwezigen: sort('overigeMandatarissenAfwezigen', 'sortMandataris'),
+
 });

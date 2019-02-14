@@ -58,11 +58,11 @@ export default Component.extend({
     return buildAanwezigen;
   },
 
-  async sortBuildAanwezige(a,b){
-    const persoonA = await a.mandataris.get('isBestuurlijkeAliasVan');
-    const persoonB = await b.mandataris.get('isBestuurlijkeAliasVan');
+  sortBuildAanwezige(a,b){
+    const persoonA = a.mandataris.isBestuurlijkeAliasVan;
+    const persoonB = b.mandataris.isBestuurlijkeAliasVan;
 
-    return await persoonA.get('achternaam').trim().localeCompare( await persoonB.get('achternaam').trim());
+    return persoonA.get('achternaam').trim().localeCompare( persoonB.get('achternaam').trim());
   },
 
   actions:{
@@ -92,14 +92,19 @@ export default Component.extend({
     },
 
     toggleAanwezigheid(status, mandataris){
+      //todo: rethink this: mandataris is a proxy here.
       if(!status){
-        //todo: rethink this: mandataris is a proxy here.
         let p = this.overigeMandatarissenAanwezigen.find(p => p.get('uri')  == mandataris.get('uri'));
         this.overigeMandatarissenAanwezigen.removeObject(p);
+
+        this.overigeMandatarissenAfwezigen.pushObject(mandataris);
       }
-      else
+      else {
         this.overigeMandatarissenAanwezigen.pushObject(mandataris);
+
+        let p = this.overigeMandatarissenAfwezigen.find(p => p.get('uri')  == mandataris.get('uri'));
+        this.overigeMandatarissenAfwezigen.removeObject(p);
+      }
     }
   }
-
 });

@@ -133,6 +133,27 @@ export default Component.extend({
     this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
   },
 
+  async setOverigeAfwezigen(triples){
+    let overigePersonenAfwezigen = A();
+    let overigeMandatarissenAfwezigen = A();
+    let subset = triples.filter(t => t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijAgendapunt'
+                                  || t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijStart')
+          .map(t =>  t.object);
+    subset = Array.from(new Set(subset));
+    for(let uri of subset){
+      let mandataris = await this.smartFetchMandataris(uri);
+      if(mandataris)
+        overigeMandatarissenAfwezigen.pushObject(mandataris);
+
+      let persoon = await this.smartFetchPersoon(uri);
+      if(persoon)
+        overigePersonenAfwezigen.pushObject(persoon);
+    }
+
+    this.set('overigePersonenAfwezigen', overigePersonenAfwezigen);
+    this.set('overigeMandatarissenAfwezigen', overigeMandatarissenAfwezigen);
+  },
+
   fetchDataFromPrevious(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
@@ -156,6 +177,7 @@ export default Component.extend({
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);
+    yield this.setOverigeAfwezigen(triples);
     this.set('tableDataReady', true);
   }),
 

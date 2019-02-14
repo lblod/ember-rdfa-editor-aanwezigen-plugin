@@ -26,11 +26,14 @@
 	  {{/each}}
 	</p>
 	<br>
-	{{!-- <p> TODO AFWEZIGEN
+
+
+
+	<p>
 	  <strong>Afwezige leden</strong>
 	  <br>
-	  {{#each sortedMandatarissenAfwezigen as |afwezige|}}
-	    <span property={{propertyToUse}} resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+		{{#each sortedMandatarissenAfwezigen as |afwezige|}}
+	    <span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
 	      <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
 	        <span property="persoon:gebruikteVoornaam">
 	          {{afwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
@@ -41,8 +44,22 @@
 	      </span>
 	    </span>,&nbsp;
 	  {{/each}}
+		{{#each sortedPersonenAfwezigen as |afwezige|}}
+			<span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+				<span property="persoon:gebruikteVoornaam">
+					{{afwezige.gebruikteVoornaam}}
+				</span>
+				<span property="foaf:familyName">
+					{{afwezige.achternaam}}
+				</span>
+			</span>,&nbsp;
+		{{/each}}
 	</p>
-	<br> --}}
+	<br>
+
+
+
+
 	{{#if voorzitter}}
 	  <p>
 	  	<strong>Voorzitter van de zitting</strong>
@@ -106,11 +123,13 @@
     {{/each}}
   </p>
   <br>
-  {{!-- <p> TODO AFWEZIGEN
+
+
+	<p>
 	  <strong>Afwezige leden</strong>
 	  <br>
     {{#each sortedMandatarissenAfwezigen as |afwezige|}}
-      <span property={{propertyToUse}} resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+      <span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
         <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
           <span property="persoon:gebruikteVoornaam">
             {{afwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
@@ -121,8 +140,22 @@
         </span>
       </span>,&nbsp;
     {{/each}}
-  </p>
-  <br> --}}
+		{{#each sortedPersonenAfwezigen as |afwezige|}}
+			<span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+				<span property="persoon:gebruikteVoornaam">
+					{{afwezige.gebruikteVoornaam}}
+				</span>
+				<span property="foaf:familyName">
+					{{afwezige.achternaam}}
+				</span>
+			</span>,&nbsp;
+		{{/each}}
+	</p>
+	<br>
+
+
+
+
   {{#if voorzitter}}
     <p>
     	<strong>Voorzitter</strong>

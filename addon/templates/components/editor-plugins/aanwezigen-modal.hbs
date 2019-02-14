@@ -46,12 +46,12 @@
     {{#if tableDataReady}}
       <label class="form__label">Aanwezige mandatarissen</label>
       <div class="u-spacer--tb--tiny">
-        {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
+        {{editor-plugins/overige-mandatarissen-aanwezigen-table overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
       <br>
       <label class="form__label">Overige aanwezige personen</label>
       <div class="u-spacer--tb--tiny">
-        {{editor-plugins/overige-aanwezigen-table overigePersonenAanwezigen=overigePersonenAanwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
+        {{editor-plugins/overige-aanwezigen-table overigePersonenAanwezigen=overigePersonenAanwezigen overigePersonenAfwezigen=overigePersonenAfwezigen bestuursorgaan=bestuursorgaan cachedPersonen=cachedPersonen cachedMandatarissen=cachedMandatarissen}}
       </div>
     {{/if}}
   {{/if}}
@@ -67,6 +67,8 @@
   voorzitter=voorzitter
   secretaris=secretaris
   overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen
+	overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen
   overigePersonenAanwezigen=overigePersonenAanwezigen
+	overigePersonenAfwezigen=overigePersonenAfwezigen
   propertyToUse=propertyToUse
 }}

@@ -59,7 +59,6 @@ export default Component.extend({
       else
         buildAanwezigen.pushObject({ 'aanwezig': true, persoon });
     }
-
     return buildAanwezigen;
   },
 
@@ -93,13 +92,19 @@ export default Component.extend({
     },
 
     toggleAanwezigheid(status, persoon){
+      //todo: rethink this: persoon is a proxy here.
       if(!status){
-        //todo: rethink this: persoon is a proxy here.
         let p = this.overigePersonenAanwezigen.find(p => p.get('uri')  == persoon.get('uri'));
         this.overigePersonenAanwezigen.removeObject(p);
+
+        this.overigePersonenAfwezigen.pushObject(persoon);
       }
-      else
+      else {
         this.overigePersonenAanwezigen.pushObject(persoon);
+
+        let p = this.overigePersonenAfwezigen.find(p => p.get('uri')  == persoon.get('uri'));
+        this.overigePersonenAfwezigen.removeObject(p);
+      }
     }
   }
 
