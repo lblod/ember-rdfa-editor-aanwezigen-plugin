@@ -11,14 +11,14 @@ export default Component.extend({
 
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
     get(){
-      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this.overigePersonenAfwezigen || [], this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     },
 
     set(k, v){
       this.set('_aanwezigen', v);
-      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this.overigePersonenAfwezigen || [], this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     }
@@ -27,6 +27,7 @@ export default Component.extend({
   loadData: task(function*() {
     let personen = this.cachedPersonen;
     let mandatarissen = this.cachedMandatarissen;
+
     if (mandatarissen.length == 0) {
       let aanwezigen = A(personen.map(persoon => {return {'aanwezig': false, persoon };}));
       if (this.overigePersonenAanwezigen.length == 0) {
@@ -40,7 +41,11 @@ export default Component.extend({
       }
       this.set('aanwezigenToSelect', aanwezigen);
     } else {
-      this.set('geenPersonen', true);
+      if (personen.length == 0) {
+        this.set('geenPersonen', true);
+      } else {
+        this.set('geenPersonen', false);
+      }
     }
   }),
 
@@ -51,13 +56,20 @@ export default Component.extend({
       this.loadData.perform();
   },
 
-  mergeAanwezigeStatus(recievedAanwezigen, buildAanwezigen){
-    for(let persoon of recievedAanwezigen){
+  mergeAanwezigeStatus(receivedAanwezigen, receivedAfwezigen, buildAanwezigen){
+    for(let persoon of receivedAanwezigen){
       let bAanwezige = buildAanwezigen.find(b => persoon.get('uri') == b.persoon.get('uri'));
       if(bAanwezige)
         bAanwezige['aanwezig'] = true;
       else
         buildAanwezigen.pushObject({ 'aanwezig': true, persoon });
+    }
+    for(let persoon of receivedAfwezigen){
+      let bAfwezige = buildAanwezigen.find(b => persoon.get('uri') == b.persoon.get('uri'));
+      if(bAfwezige)
+        bAfwezige['aanwezig'] = false;
+      else
+        buildAanwezigen.pushObject({ 'aanwezig': false, persoon });
     }
     return buildAanwezigen;
   },

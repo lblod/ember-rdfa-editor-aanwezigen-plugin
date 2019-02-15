@@ -11,14 +11,14 @@ export default Component.extend({
 
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
     get(){
-      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     },
 
     set(k, v){
       this.set('_aanwezigen', v);
-      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this._aanwezigen);
+      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
       return this._aanwezigen;
     }
@@ -26,6 +26,7 @@ export default Component.extend({
 
   loadData: task(function *(){
     let mandatarissen = this.cachedMandatarissen;
+
     let aanwezigen = A( mandatarissen.map( mandataris => {return {'aanwezig': false, mandataris };}) );
     if(this.overigeMandatarissenAanwezigen.length == 0){
       aanwezigen.forEach(a => a.aanwezig = true);
@@ -46,23 +47,29 @@ export default Component.extend({
       this.loadData.perform();
   },
 
-  mergeAanwezigeStatus(recievedAanwezigen, buildAanwezigen){
-    for(let mandataris of recievedAanwezigen){
+  mergeAanwezigeStatus(receivedAanwezigen, receivedAfwezigen, buildAanwezigen){
+    for(let mandataris of receivedAanwezigen){
       let bAanwezige = buildAanwezigen.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
       if(bAanwezige)
         bAanwezige['aanwezig'] = true;
       else
         buildAanwezigen.pushObject({ 'aanwezig': true, mandataris });
     }
-
+    for(let mandataris of receivedAfwezigen){
+      let bAfwezige = buildAanwezigen.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
+      if(bAfwezige)
+        bAfwezige['aanwezig'] = false;
+      else
+        buildAanwezigen.pushObject({ 'aanwezig': false, mandataris });
+    }
     return buildAanwezigen;
   },
 
   sortBuildAanwezige(a,b){
-    const persoonA = a.mandataris.isBestuurlijkeAliasVan;
-    const persoonB = b.mandataris.isBestuurlijkeAliasVan;
+    const mandatarisA = a.mandataris.isBestuurlijkeAliasVan;
+    const mandatarisB = b.mandataris.isBestuurlijkeAliasVan;
 
-    return persoonA.get('achternaam').trim().localeCompare( persoonB.get('achternaam').trim());
+    return mandatarisA.get('achternaam').trim().localeCompare( mandatarisB.get('achternaam').trim());
   },
 
   actions:{

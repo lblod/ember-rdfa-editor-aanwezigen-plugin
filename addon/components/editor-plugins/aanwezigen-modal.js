@@ -61,7 +61,7 @@ export default Component.extend({
     };
 
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
-    this.set('cachedMandatarissen', mandatarissenInPeriode);
+    this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
   },
 
   async smartFetchMandataris(subjectUri){
@@ -120,9 +120,11 @@ export default Component.extend({
           .map(t =>  t.object);
     subset = Array.from(new Set(subset));
     for(let uri of subset){
-      let mandataris = await this.smartFetchMandataris(uri);
-      if(mandataris)
-        overigeMandatarissenAanwezigen.pushObject(mandataris);
+      if(this.cachedMandatarissen.length > 0) {
+        let mandataris = await this.smartFetchMandataris(uri);
+        if(mandataris)
+          overigeMandatarissenAanwezigen.pushObject(mandataris);
+      }
 
       let persoon = await this.smartFetchPersoon(uri);
       if(persoon)
@@ -141,9 +143,11 @@ export default Component.extend({
           .map(t =>  t.object);
     subset = Array.from(new Set(subset));
     for(let uri of subset){
-      let mandataris = await this.smartFetchMandataris(uri);
-      if(mandataris)
-        overigeMandatarissenAfwezigen.pushObject(mandataris);
+      if(this.cachedMandatarissen.length > 0) {
+        let mandataris = await this.smartFetchMandataris(uri);
+        if(mandataris)
+          overigeMandatarissenAfwezigen.pushObject(mandataris);
+      }
 
       let persoon = await this.smartFetchPersoon(uri);
       if(persoon)
