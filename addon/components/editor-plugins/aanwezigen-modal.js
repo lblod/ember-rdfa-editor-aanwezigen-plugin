@@ -126,9 +126,11 @@ export default Component.extend({
           overigeMandatarissenAanwezigen.pushObject(mandataris);
       }
 
-      let persoon = await this.smartFetchPersoon(uri);
-      if(persoon)
-        overigePersonenAanwezigen.pushObject(persoon);
+      if((this.cachedPersonen.length > 0) && (overigeMandatarissenAanwezigen.length > 0)) {
+        let persoon = await this.smartFetchPersoon(uri);
+        if(persoon)
+          overigePersonenAanwezigen.pushObject(persoon);
+      }
     }
 
     this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
@@ -149,9 +151,11 @@ export default Component.extend({
           overigeMandatarissenAfwezigen.pushObject(mandataris);
       }
 
-      let persoon = await this.smartFetchPersoon(uri);
-      if(persoon)
-        overigePersonenAfwezigen.pushObject(persoon);
+      if(this.cachedPersonen.length > 0) {
+        let persoon = await this.smartFetchPersoon(uri);
+        if(persoon)
+          overigePersonenAfwezigen.pushObject(persoon);
+      }
     }
 
     this.set('overigePersonenAfwezigen', overigePersonenAfwezigen);

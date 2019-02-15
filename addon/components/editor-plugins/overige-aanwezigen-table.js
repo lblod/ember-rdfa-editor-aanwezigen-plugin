@@ -91,6 +91,10 @@ export default Component.extend({
     addAanwezige(){
       if(!this.newAanwezige)
         return;
+
+      if(this.aanwezigenToSelect.length == 0)
+        this.set('geenPersonen', false);
+
       this.aanwezigenToSelect.pushObject({ 'aanwezig': true, persoon: this.newAanwezige });
       this.overigePersonenAanwezigen.pushObject(this.newAanwezige);
 
