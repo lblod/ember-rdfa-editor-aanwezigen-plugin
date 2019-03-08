@@ -3,6 +3,7 @@
     <div class="col--10-12">
       {{#if bestuursorgaanUri}}
         {{#if loadData.isRunning}}
+          <p>Plugin laden</p>
           <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
         {{else}}
           <p class="u-spacer--tiny">
@@ -20,13 +21,12 @@
 
 <div class="modal-dialog__footer">
   {{#wu-button-group}}
-    {{#if bestuursorgaanUri}}
       {{wu-button
         label="Beheer aanwezigen"
         isNarrow=true
         onClick=(action "togglePopup")
+        disabled=loadData.isRunning
       }}
-    {{/if}}
     {{/wu-button-group}}
 </div>
 
