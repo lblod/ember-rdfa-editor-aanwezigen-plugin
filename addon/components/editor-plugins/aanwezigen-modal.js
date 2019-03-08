@@ -121,13 +121,18 @@ export default Component.extend({
     subset = Array.from(new Set(subset));
     for(let uri of subset){
       if(this.cachedMandatarissen.length > 0) {
-        let mandataris = await this.smartFetchMandataris(uri);
+        const mandataris = await this.smartFetchMandataris(uri);
         if(mandataris)
           overigeMandatarissenAanwezigen.pushObject(mandataris);
+        else {
+          const persoon = await this.smartFetchPersoon(uri);
+          if(persoon)
+            overigePersonenAanwezigen.pushObject(persoon);
+        }
       }
 
       if((this.cachedPersonen.length > 0) && (overigeMandatarissenAanwezigen.length > 0)) {
-        let persoon = await this.smartFetchPersoon(uri);
+        const persoon = await this.smartFetchPersoon(uri);
         if(persoon)
           overigePersonenAanwezigen.pushObject(persoon);
       }
