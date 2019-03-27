@@ -46,17 +46,27 @@ export default Component.extend({
     if(!persoon)
       return null;
 
-   //set cache so it may be found later
-   this.cachedPersonen.pushObject(persoon);
+    //set cache so it may be found later
+    this.cachedPersonen.pushObject(persoon);
 
-   return persoon;
+    return persoon;
   },
 
   async setCachedMandatarissen(){
+    const bestuursorgaanIsTijdsspecialisatieVan = await this.bestuursorgaan.get('isTijdsspecialisatieVan');
+    const classificatieCode = await bestuursorgaanIsTijdsspecialisatieVan.get('classificatie');
+    const defaultTypes =  await classificatieCode.get('standaardType');
+    let defaultTypesUris = A();
+    defaultTypes.forEach(defaultType => {
+      defaultTypesUris.pushObject(defaultType.uri);
+    });
+    const stringifiedDefaultTypeUris = defaultTypesUris.join(',');
+
     //a subset of mandatarissen of interest
     let queryParams = {
       include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
+      'filter[bekleedt][bestuursfunctie][:uri:]': stringifiedDefaultTypeUris,
       page: { size: 10000 }
     };
 
