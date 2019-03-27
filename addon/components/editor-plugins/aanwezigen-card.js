@@ -2,9 +2,7 @@ import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/aanwezigen-card';
-import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
 import { task } from 'ember-concurrency';
-import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 
 /**
