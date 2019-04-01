@@ -1,3 +1,4 @@
+import { warn } from '@ember/debug';
 import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import Component from '@ember/component';
@@ -52,18 +53,47 @@ export default Component.extend({
   */
   hintsRegistry: reads('info.hintsRegistry'),
 
-  bestuursorgaanUri: reads('rdfaEditorAanwezigenPlugin.bestuursorgaanUri'),
+  /**
+   * Query for a record in the store and yield the first item
+   */
+  async queryFirst( kind, filter ) {
+    return (await this.store.query( kind, filter )).firstObject;
+  },
 
   async setProperties() {
-    let bestuurseenheid = ( await this.store.query('bestuurseenheid',
-                                           { 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri }
-                                                 )).firstObject;
-    this.set('bestuurseenheid', bestuurseenheid);
+    this.set("bestuursorgaanUri", this.findBestuursorgaanUri());
 
-    let bestuursorgaan = (await this.store.query('bestuursorgaan',
-                                                  { 'filter[:uri:]': this.bestuursorgaanUri }
-                                                )).firstObject;
-    this.set('bestuursorgaan', bestuursorgaan);
+    if( !this.bestuursorgaanUri ){
+      warn( "Could not find bestuursorgaan URI" );
+    } else {
+      this.set('bestuurseenheid',
+               await this.queryFirst('bestuurseenheid', {
+                 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri
+               }));
+
+      this.set('bestuursorgaan',
+               await this.queryFirst('bestuursorgaan', {
+                 'filter[:uri:]': this.bestuursorgaanUri
+               }));
+    }
+  },
+
+  findBestuursorgaanUri() {
+    const rdfaBlocks = this.editor.getContexts();
+
+    // Copied from service
+    let bestuursorgaanUri;
+    for(let block of rdfaBlocks){
+      let context = block.context;
+      const zitting = context.find((triple) => triple.object === 'http://data.vlaanderen.be/ns/besluit#Zitting');
+      if (zitting) {
+        const foundBestuursorgaan = context.find((triple) => triple.subject === zitting.subject && triple.predicate === 'http://data.vlaanderen.be/ns/besluit#isGehoudenDoor');
+        if (foundBestuursorgaan){
+          return foundBestuursorgaan.object;
+        }
+      }
+    }
+    return null;
   },
 
   createWrappingHTML(innerHTML){
@@ -81,7 +111,7 @@ export default Component.extend({
 
   didReceiveAttrs() {
     this._super(...arguments);
-    if(this.bestuursorgaanUri)
+    if(this.editor)
       this.loadData.perform();
   },
 
