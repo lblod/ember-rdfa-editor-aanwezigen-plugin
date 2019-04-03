@@ -75,7 +75,9 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    return a.persoon.get('achternaam').trim().localeCompare(b.persoon.get('achternaam').trim());
+    let naamA = a.persoon.get('achternaam') || '';
+    let naamB = b.persoon.get('achternaam') || '';
+    return naamA.trim().localeCompare(naamB.trim());
   },
 
   actions:{
