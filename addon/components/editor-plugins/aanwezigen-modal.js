@@ -56,17 +56,13 @@ export default Component.extend({
     const bestuursorgaanIsTijdsspecialisatieVan = await this.bestuursorgaan.get('isTijdsspecialisatieVan');
     const classificatieCode = await bestuursorgaanIsTijdsspecialisatieVan.get('classificatie');
     const defaultTypes =  await classificatieCode.get('standaardType');
-    let defaultTypesUris = A();
-    defaultTypes.forEach(defaultType => {
-      defaultTypesUris.pushObject(defaultType.uri);
-    });
-    const stringifiedDefaultTypeUris = defaultTypesUris.join(',');
+    const stringifiedDefaultTypeIds = defaultTypes.map(t => t.id).join(',');
 
     //a subset of mandatarissen of interest
     let queryParams = {
       include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
-      'filter[bekleedt][bestuursfunctie][:uri:]': stringifiedDefaultTypeUris,
+      'filter[bekleedt][bestuursfunctie][:id:]': stringifiedDefaultTypeIds,
       page: { size: 10000 }
     };
 

@@ -66,10 +66,10 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    const mandatarisA = a.mandataris.isBestuurlijkeAliasVan;
-    const mandatarisB = b.mandataris.isBestuurlijkeAliasVan;
+    const mandatarisANaam = a.mandataris.isBestuurlijkeAliasVan.get('achternaam') || '';
+    const mandatarisBNaam = b.mandataris.isBestuurlijkeAliasVan.get('achternaam') || '';
 
-    return mandatarisA.get('achternaam').trim().localeCompare( mandatarisB.get('achternaam').trim());
+    return mandatarisANaam.trim().localeCompare( mandatarisBNaam.trim());
   },
 
   actions:{
