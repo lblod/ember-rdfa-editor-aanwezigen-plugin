@@ -6,7 +6,40 @@ import { warn } from '@ember/debug';
 
 
 /**
- * Service responsible for correct annotation of dates
+ * Service responsible for correct insertion and management in notulen
+ * ---------------------------------------------------
+ * CODE REVIEW NOTES
+ * ---------------------------------------------------
+ *
+ *  INTERACTION PATTERNS
+ *  --------------------
+ *  For all incoming contexts, first looks whether there is an rdfa instructive to manage aanwezigen.
+ *  If encountered, a hint is set on the content of the instructive, the DOM node is passed to the card.
+ *  Once loaded, the management occurs in a modal. On insert the dom node is updated/replaced.
+ *
+ *  This plugin uses the document as a datastore (along with the normal backend):
+ *   - on edit, to keep track of which aanwezigen have already been inserted
+ *   - on create to copy data from a previous agendapunt, so the user avoids inserting the same info twice
+ *   - on create, to set proper filter on bestuurorgaan (only a subset of mandatarissen should be availible in notulen)
+ *
+ *  POTENTIAL ISSUES/TODO
+ *  ---------------------
+ *  - The domNode is passed to the card. At insertion time, the domNode may be detached from tree, which results in broken plugin.
+ *
+ *   - Performance: A scan on RDFA content is slow once we have a lot of aanwezigen
+ *    Furthermore, it might be in future we'll have to scan the whole document to keep track of which mandatarissen may have been fired
+ *      and which have been appointed as the new ones.
+ *
+ *  - Due to the several scenarios it has to support (aanwezige personen/mandatarissen, creation of personen) this plugin has grown in complexity
+ *     and needs maintenance.
+ *
+ *  OTHER INFO
+ *  ----------
+ *  - uses metamodel plugin utils to:
+ *    deserialize triples to ember object
+ * ---------------------------------------------------
+ * END CODE REVIEW NOTES
+ * ---------------------------------------------------
  *
  * @module editor-aanwezigen-plugin
  * @class RdfaEditorAanwezigenPlugin
