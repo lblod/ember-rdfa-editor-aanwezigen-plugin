@@ -181,9 +181,7 @@ export default Component.extend({
   },
 
   loadData: task(function* (){
-    let domData = this.fetchDataFromPrevious();
-    if(this.editTable)
-      domData = this.domTable;
+    const domData = this.editTable ? this.domTable: this.fetchDataFromPrevious();
     let triples = this.serializeTableToTriples(domData);
     yield this.setCachedMandatarissen();
     if(this.cachedMandatarissen.length == 0) {
