@@ -32,11 +32,6 @@ export default Component.extend({
       aanwezigen.forEach(a => a.aanwezig = true);
       this.overigeMandatarissenAanwezigen.setObjects(aanwezigen.map(a =>  a.mandataris));
     }
-    if(aanwezigen.length == 0) {
-      this.set('geenMandatarissen', true);
-    } else {
-      this.set('geenMandatarissen', false);
-    }
     this.set('aanwezigenToSelect', aanwezigen);
   }),
 
