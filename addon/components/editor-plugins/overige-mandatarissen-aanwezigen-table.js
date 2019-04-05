@@ -9,6 +9,13 @@ export default Component.extend({
   layout,
   store: service(),
 
+  /** list of mandatarissen that are present **/
+  overigeMandatarissenAanwezigen: null,
+  /** list of mandatarissen that are not present **/
+  overigeMandatarissenAfwezigen: null,
+  /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
+  cachedMandatarissen: null,
+
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
     get(){
       this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
