@@ -72,11 +72,13 @@ export default Component.extend({
 
   async smartFetchMandataris(subjectUri){
     let mandataris = this.cachedMandatarissen.find(p => p.get('uri') == subjectUri);
-    if(mandataris)
+    if(mandataris) {
       return mandataris;
+    }
     //if not existant try to create it on based on information in triples
-
-    mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri })).firstObject;
+    mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri,
+                                                         include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie'
+                                                       })).firstObject;
     if(!mandataris)
       return null;
 
