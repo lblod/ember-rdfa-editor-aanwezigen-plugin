@@ -34,18 +34,7 @@ export default Component.extend({
         aanwezigen.forEach(a => a.aanwezig = true);
         this.overigePersonenAanwezigen.setObjects(aanwezigen.map(a => a.persoon));
       }
-      if(aanwezigen.length == 0) {
-        this.set('geenPersonen', true);
-      } else {
-        this.set('geenPersonen', false);
-      }
       this.set('aanwezigenToSelect', aanwezigen);
-    } else {
-      if (personen.length == 0) {
-        this.set('geenPersonen', true);
-      } else {
-        this.set('geenPersonen', false);
-      }
     }
   }),
 
