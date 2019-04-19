@@ -19,8 +19,9 @@
   </div>
 </div>
 
-<div class="modal-dialog__footer">
-  {{#wu-button-group}}
+{{#if bestuursorgaanUri}}
+  <div class="modal-dialog__footer">
+    {{#wu-button-group}}
       {{wu-button
         label="Beheer aanwezigen"
         isNarrow=true
@@ -28,7 +29,8 @@
         disabled=loadData.isRunning
       }}
     {{/wu-button-group}}
-</div>
+  </div>
+{{/if}}
 
 {{# if popup}}
   {{#wu-modal

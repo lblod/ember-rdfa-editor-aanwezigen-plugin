@@ -34,18 +34,7 @@ export default Component.extend({
         aanwezigen.forEach(a => a.aanwezig = true);
         this.overigePersonenAanwezigen.setObjects(aanwezigen.map(a => a.persoon));
       }
-      if(aanwezigen.length == 0) {
-        this.set('geenPersonen', true);
-      } else {
-        this.set('geenPersonen', false);
-      }
       this.set('aanwezigenToSelect', aanwezigen);
-    } else {
-      if (personen.length == 0) {
-        this.set('geenPersonen', true);
-      } else {
-        this.set('geenPersonen', false);
-      }
     }
   }),
 
@@ -75,7 +64,9 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    return a.persoon.get('achternaam').trim().localeCompare(b.persoon.get('achternaam').trim());
+    let naamA = a.persoon.get('achternaam') || '';
+    let naamB = b.persoon.get('achternaam') || '';
+    return naamA.trim().localeCompare(naamB.trim());
   },
 
   actions:{

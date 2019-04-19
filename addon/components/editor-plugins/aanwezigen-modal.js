@@ -46,17 +46,23 @@ export default Component.extend({
     if(!persoon)
       return null;
 
-   //set cache so it may be found later
-   this.cachedPersonen.pushObject(persoon);
+    //set cache so it may be found later
+    this.cachedPersonen.pushObject(persoon);
 
-   return persoon;
+    return persoon;
   },
 
   async setCachedMandatarissen(){
+    const bestuursorgaanIsTijdsspecialisatieVan = await this.bestuursorgaan.get('isTijdsspecialisatieVan');
+    const classificatieCode = await bestuursorgaanIsTijdsspecialisatieVan.get('classificatie');
+    const defaultTypes =  await classificatieCode.get('standaardType');
+    const stringifiedDefaultTypeIds = defaultTypes.map(t => t.id).join(',');
+
     //a subset of mandatarissen of interest
     let queryParams = {
       include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
+      'filter[bekleedt][bestuursfunctie][:id:]': stringifiedDefaultTypeIds,
       page: { size: 10000 }
     };
 
@@ -66,11 +72,13 @@ export default Component.extend({
 
   async smartFetchMandataris(subjectUri){
     let mandataris = this.cachedMandatarissen.find(p => p.get('uri') == subjectUri);
-    if(mandataris)
+    if(mandataris) {
       return mandataris;
+    }
     //if not existant try to create it on based on information in triples
-
-    mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri })).firstObject;
+    mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri,
+                                                         include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie'
+                                                       })).firstObject;
     if(!mandataris)
       return null;
 
@@ -170,16 +178,12 @@ export default Component.extend({
   fetchDataFromPrevious(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
-      // if you decide to change the node to parse for triples, be aware of potential performance consequences,
-      // if you still use the abused ContextScanner #metoo
-      return previousTables[0];
+      return previousTables[previousTables.length - 1];
     return null;
   },
 
   loadData: task(function* (){
-    let domData = this.fetchDataFromPrevious();
-    if(this.editTable)
-      domData = this.domTable;
+    const domData = this.editTable ? this.domTable: this.fetchDataFromPrevious();
     let triples = this.serializeTableToTriples(domData);
     yield this.setCachedMandatarissen();
     if(this.cachedMandatarissen.length == 0) {

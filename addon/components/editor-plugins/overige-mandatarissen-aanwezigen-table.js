@@ -9,6 +9,13 @@ export default Component.extend({
   layout,
   store: service(),
 
+  /** list of mandatarissen that are present **/
+  overigeMandatarissenAanwezigen: null,
+  /** list of mandatarissen that are not present **/
+  overigeMandatarissenAfwezigen: null,
+  /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
+  cachedMandatarissen: null,
+
   aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
     get(){
       this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
@@ -31,11 +38,6 @@ export default Component.extend({
     if(this.overigeMandatarissenAanwezigen.length == 0){
       aanwezigen.forEach(a => a.aanwezig = true);
       this.overigeMandatarissenAanwezigen.setObjects(aanwezigen.map(a =>  a.mandataris));
-    }
-    if(aanwezigen.length == 0) {
-      this.set('geenMandatarissen', true);
-    } else {
-      this.set('geenMandatarissen', false);
     }
     this.set('aanwezigenToSelect', aanwezigen);
   }),
@@ -66,10 +68,10 @@ export default Component.extend({
   },
 
   sortBuildAanwezige(a,b){
-    const mandatarisA = a.mandataris.isBestuurlijkeAliasVan;
-    const mandatarisB = b.mandataris.isBestuurlijkeAliasVan;
+    const mandatarisANaam = a.mandataris.isBestuurlijkeAliasVan.get('achternaam') || '';
+    const mandatarisBNaam = b.mandataris.isBestuurlijkeAliasVan.get('achternaam') || '';
 
-    return mandatarisA.get('achternaam').trim().localeCompare( mandatarisB.get('achternaam').trim());
+    return mandatarisANaam.trim().localeCompare( mandatarisBNaam.trim());
   },
 
   actions:{

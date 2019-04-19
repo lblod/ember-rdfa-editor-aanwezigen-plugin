@@ -8,7 +8,7 @@ export default Model.extend({
   bindingEinde: attr('date'),
   bindingStart: attr('date'),
   bestuurseenheid: belongsTo('bestuurseenheid', { inverse: 'bestuursorgaan' }),
-  // classificatie: belongsTo('bestuursorgaan-classificatie-code', { inverse: null }),
+  classificatie: belongsTo('bestuursorgaan-classificatie-code', { inverse: null }),
   isTijdsspecialisatieVan: belongsTo('bestuursorgaan', { inverse: 'heeftTijdsspecialisaties' }),
   // wordtSamengesteldDoor: belongsTo('rechtstreekse-verkiezing', { inverse: 'steltSamen' }),
   heeftTijdsspecialisaties: hasMany('bestuursorgaan', { inverse: 'isTijdsspecialisatieVan' }),
@@ -24,5 +24,5 @@ export default Model.extend({
     isTijdsspecialisatieVan: "http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan",
     bevat: "http://www.w3.org/ns/org#hasPost"
   }
-  
+
 });
