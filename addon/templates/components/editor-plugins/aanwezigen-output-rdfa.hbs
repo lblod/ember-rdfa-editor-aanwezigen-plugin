@@ -32,6 +32,9 @@
 	<p>
 	  <strong>Afwezige leden</strong>
 	  <br>
+	  {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
+		  <span class="smaller">Geen</span>
+	  {{/unless}}
 		{{#each sortedMandatarissenAfwezigen as |afwezige|}}
 	    <span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
 	      <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
@@ -128,6 +131,9 @@
 	<p>
 	  <strong>Afwezige leden</strong>
 	  <br>
+	  {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
+		  <span class="smaller">Geen</span>
+	  {{/unless}}
     {{#each sortedMandatarissenAfwezigen as |afwezige|}}
       <span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
         <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>

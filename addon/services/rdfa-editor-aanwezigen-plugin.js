@@ -92,7 +92,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     if(cards.length > 0){
       hintsRegistry.addHints(hrId, this.who, cards);
     }
-  }).keepLatest(),
+  }),
 
   /**
    * Given context object, tries to detect a context the plugin can work on

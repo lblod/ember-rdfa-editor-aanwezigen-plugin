@@ -42,13 +42,11 @@
           </td>
         </tr>
       {{/if}}
-      {{#if geenMandatarissen}}
-        <td colspan="4">Geen mandatarissen gevonden.</td>
+      {{#each aanwezigenToSelect as |aanwezige|}}
+        {{editor-plugins/overige-mandatarissen-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
       {{else}}
-        {{#each aanwezigenToSelect as |aanwezige|}}
-          {{editor-plugins/overige-mandatarissen-aanwezigen-row aanwezige=aanwezige onToggleAanwezig=(action "toggleAanwezigheid")}}
-        {{/each}}
-      {{/if}}
+        <td colspan="4">Geen mandatarissen gevonden.</td>
+      {{/each}}
     {{/if}}
   </tbody>
 </table>
