@@ -82,7 +82,6 @@ export default Component.extend({
     const rdfaBlocks = this.editor.getContexts();
 
     // Copied from service
-    let bestuursorgaanUri;
     for(let block of rdfaBlocks){
       let context = block.context;
       const zitting = context.find((triple) => triple.object === 'http://data.vlaanderen.be/ns/besluit#Zitting');
