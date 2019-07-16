@@ -200,8 +200,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
   },
 
   findDomNodeForContext(editor, context, condition){
-    let richNodes = isArray(context.richNode) ? context.richNode : [ context.richNode ];
-    let domNode = richNodes
+    let domNode = context.richNodes
           .map(r => this.ascendDomNodesUntil(editor.rootNode, r.domNode, condition))
           .find(d => d);
     if(!domNode){
