@@ -1,44 +1,51 @@
-<div class="modal-dialog__header">
-  <div class="grid">
-    <div class="col--10-12">
-      {{#if bestuursorgaanUri}}
-        {{#if loadData.isRunning}}
-          <p>Plugin laden</p>
-          <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
-        {{else}}
-          <p class="u-spacer--tiny">
-            Wil u graag de <strong>aanwezigen</strong> beheren?
-          </p>
-        {{/if}}
+<Say::Hint @size="small" @type="sectioned" as |hint|>
+	<hint.header>
+    {{#if bestuursorgaanUri}}
+      {{#if loadData.isRunning}}
+        Plugin laden
+        <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
       {{else}}
-        <p class="u-spacer--tiny">
-          Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de aanwezigen invoert.
-        </p>
+      	Wil u graag de <strong>aanwezigen</strong> beheren?
       {{/if}}
-    </div>
-  </div>
-</div>
+    {{else}}
+    	Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de aanwezigen invoert.
+    {{/if}}
+	</hint.header>
 
-{{#if bestuursorgaanUri}}
-  <div class="modal-dialog__footer">
-    {{#wu-button-group}}
-      {{wu-button
-        label="Beheer aanwezigen"
-        isNarrow=true
-        onClick=(action "togglePopup")
-        disabled=loadData.isRunning
-      }}
-    {{/wu-button-group}}
-  </div>
-{{/if}}
+	{{#if bestuursorgaanUri}}
+		{{#unless loadData.isRunning}}
+			<hint.footer>
+			  <Say::ActionGroup>
+				  <Say::Button @width="narrow" @onClick={{action "togglePopup"}}>Beheer aanwezigen</Say::Button>
+	{{!-- 	      {{wu-button
+		        label="Beheer aanwezigen"
+		        isNarrow=true
+		        onClick=(action "togglePopup")
+		        disabled=loadData.isRunning
+		      }} --}}
+			  </Say::ActionGroup>
+			</hint.footer>
+		{{/unless}}
+	{{/if}}
+</Say::Hint>
 
-{{# if popup}}
-  {{#wu-modal
-     title="Beheer aanwezigen"
-     dialog-class="modal-dialog--wide modal-dialog--sectioned"
-     onClose=(action 'togglePopup')
-     as |m|}}
-    {{#m.content isSectioned=false}}
+{{#if popup}}
+	<Say::Modal @size="wide" @type="sectioned" as |modal|>
+		<modal.header> {{!-- @onClick={{action "togglePopup"}} --}}
+			<div class="vl-grid">
+			  <div class="vl-col--10-12">
+			    <p class="vl-modal-dialog__title">
+			    	Beheer aanwezigen
+			    </p>
+			  </div>
+		    <div class="vl-col--2-12 u-align-right">
+		      <a class="link--icon--close" href="#" {{action "togglePopup"}}>
+		        <span class="u-visually-hidden">Venster sluiten</span>
+		      </a>
+		    </div>
+			</div>
+		</modal.header>
+		<modal.content @padded="small">
       {{editor-plugins/aanwezigen-modal
         bestuurseenheid=bestuurseenheid
         bestuursorgaan=bestuursorgaan
@@ -48,13 +55,14 @@
         domTable=info.domNodeToUpdate
         editTable=info.editMode
       }}
-    {{/m.content}}
-    <div class="modal-dialog__footer">
-      {{#wu-button-group}}
-        {{wu-button label="Voeg aanwezigen in" class="button button--narrow" onClick=(action 'insert')}}
-        {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
-      {{/wu-button-group}}
-    </div>
-  {{/wu-modal}}
+		</modal.content>
+		<modal.footer>
+		  <Say::ActionGroup>
+			  <Say::Button @width="narrow" @onClick={{action 'insert'}}>Voeg aanwezigen in</Say::Button>
+			  <Say::Button @width="narrow" @style="alt" @onClick={{action 'togglePopup'}}>Annuleer</Say::Button>
+		  </Say::ActionGroup>
+		</modal.footer>
+	</Say::Modal>
 {{/if}}
+
 {{yield}}
