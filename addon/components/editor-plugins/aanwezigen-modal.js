@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/aanwezigen-modal';
 import { A } from '@ember/array';
-import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
+import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa/rdfa-context-scanner';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
