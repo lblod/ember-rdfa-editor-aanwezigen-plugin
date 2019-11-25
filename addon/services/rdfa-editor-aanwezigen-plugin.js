@@ -1,9 +1,8 @@
 import Service from '@ember/service';
 import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
-import { isArray } from '@ember/array';
+import { A, isArray } from '@ember/array';
 import { warn } from '@ember/debug';
-
 
 /**
  * Service responsible for correct insertion and management in notulen
@@ -77,12 +76,12 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
 
       let propertyToUse = this.returnPropertyToUse(context);
 
-      if(triple.predicate == this.insertAanwezigenText){
+      if(triple.predicate == this.insertAanwezigenText) {
         hintsRegistry.removeHintsInRegion(context.region, hrId, this.who);
         hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
       }
       let domNodeRegion = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
-      if(triple.predicate == this.aanwezigenTable && !hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
+      if(triple.predicate == this.aanwezigenTable && ! hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
         hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
         hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
       }
@@ -105,14 +104,16 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
    *
    * @private
    */
-  detectRelevantContext(context){
-    if(context.context.slice(-1)[0].predicate == this.insertAanwezigenText){
-      return context.context.slice(-1)[0];
+  detectRelevantContext({ context, semanticNode }) {
+    if (semanticNode.rdfaAttributes && semanticNode.rdfaAttributes.properties) {
+      const properties = semanticNode.rdfaAttributes.properties || A();
+      if (properties.includes(this.insertAanwezigenText)) {
+        return context.find((triple) => triple.predicate === this.insertAanwezigenText);
+      }
+      if (properties.includes(this.aanwezigenTable)) {
+        return context.find((triple) => triple.predicate === this.aanwezigenTable);
+      }
     }
-    if(context.context.slice(-1)[0].predicate == this.aanwezigenTable){
-      return context.context.slice(-1)[0];
-    }
-    return null;
   },
 
   returnPropertyToUse(context){
