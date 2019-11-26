@@ -18,7 +18,7 @@ export default Component.extend({
   searchByName: task(function* (searchData) {
     yield timeout(300);
     let queryParams = {
-      include: 'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
+      include: 'is-bestuurlijke-alias-van,is-bestuurlijke-alias-van.geboorte,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaanUri,
       'filter[is-bestuurlijke-alias-van][achternaam]': searchData,
       page: { size: 100 },

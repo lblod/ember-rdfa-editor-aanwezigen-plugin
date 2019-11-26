@@ -60,7 +60,7 @@ export default Component.extend({
 
     //a subset of mandatarissen of interest
     let queryParams = {
-      include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie',
+      include:'is-bestuurlijke-alias-van,is-bestuurlijke-alias-van.geboorte,bekleedt,bekleedt.bestuursfunctie',
       'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
       'filter[bekleedt][bestuursfunctie][:id:]': stringifiedDefaultTypeIds,
       page: { size: 10000 }
@@ -77,7 +77,7 @@ export default Component.extend({
     }
     //if not existant try to create it on based on information in triples
     mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': subjectUri,
-                                                         include:'is-bestuurlijke-alias-van,bekleedt,bekleedt.bestuursfunctie'
+                                                         include:'is-bestuurlijke-alias-van,is-bestuurlijke-alias-van.geboorte,bekleedt,bekleedt.bestuursfunctie'
                                                        })).firstObject;
     if(!mandataris)
       return null;
