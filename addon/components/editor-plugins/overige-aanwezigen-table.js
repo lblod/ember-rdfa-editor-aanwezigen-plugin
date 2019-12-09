@@ -9,7 +9,7 @@ export default Component.extend({
   layout,
   store: service(),
 
-  aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
+  aanwezigenToSelect: computed('overigePersonenAanwezigen.[]', 'overigePersonenAfwezigen.[]', '_aanwezigen.[]', {
     get(){
       this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this.overigePersonenAfwezigen || [], this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));

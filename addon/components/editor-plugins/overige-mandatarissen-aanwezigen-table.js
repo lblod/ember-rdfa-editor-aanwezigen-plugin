@@ -16,7 +16,7 @@ export default Component.extend({
   /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
   cachedMandatarissen: null,
 
-  aanwezigenToSelect: computed('aanwezigenToSelect.[]', {
+  aanwezigenToSelect: computed('overigeMandatarissenAanwezigen.[]', 'overigeMandatarissenAfwezigen.[]', '_aanwezigen.[]', {
     get(){
       this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
       this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
