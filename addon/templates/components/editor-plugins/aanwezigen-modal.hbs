@@ -1,46 +1,46 @@
 {{#unless (is-equal viewMode 'default')}}
-	<div class="u-padding--round--tiny u-background--gray-lightest">
-	  {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
-	    <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
-	  {{/wu-link-button}}
-	{{!-- hiding it because causing many issues
-	{{else}}
-	  {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
-	    <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
-	  {{/wu-link-button}}
-	--}}
-	</div>
+  <div class="u-padding--round--tiny u-background--gray-lightest">
+    {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "goHome")}}
+      <i class="vi vi-cross vi-u-s"></i>Terug naar hoofdscherm
+    {{/wu-link-button}}
+  {{!-- hiding it because causing many issues
+  {{else}}
+    {{#wu-link-button class="button--small" isNarrow=true onClick=(action "createPerson")}}
+      <i class="vi vi-plus vi-u-s"></i>Maak nieuwe persoon aan
+    {{/wu-link-button}}
+  --}}
+  </div>
 {{/unless}}
 
 {{#if (is-equal viewMode 'default')}}
   {{#if loadData.isRunning}}
-  	<p>Bezig met laden van de aanwezigenlijst</p>
+    <p>Bezig met laden van de aanwezigenlijst</p>
     <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
   {{else}}
-		<div class="u-spacer">
-		  <div class="grid">
-		    <div class="col--6-12">
-		      <label class="form__label">
-		        Voorzitter van de zitting
-		        {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
-		      </label>
-		    </div>
-		  </div>
-		</div>
-		<div class="u-spacer">
-		  <div class="grid">
-		    <div class="col--6-12">
-		      <label class="form__label">
-		        Secretaris van de zitting <span class="text-fade">- vrij invulveld</span>
-		        {{input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
-		          value=secretaris}}
-		        {{!-- disable unitil data
-		        {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
-		        --}}
-		      </label>
-		    </div>
-		  </div>
-		</div>
+    <div class="u-spacer">
+      <div class="grid">
+        <div class="col--6-12">
+          <label class="form__label">
+            Voorzitter van de zitting
+            {{editor-plugins/personen-selector onSelect=(action "selectVoorzitter") persoon=voorzitter}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="u-spacer">
+      <div class="grid">
+        <div class="col--6-12">
+          <label class="form__label">
+            Secretaris van de zitting <span class="text-fade">- vrij invulveld</span>
+            {{input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
+              value=secretaris}}
+            {{!-- disable unitil data
+            {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
+            --}}
+          </label>
+        </div>
+      </div>
+    </div>
     {{#if tableDataReady}}
       <label class="form__label">Aanwezige mandatarissen</label>
       <div class="u-spacer--tb--tiny">
@@ -73,8 +73,8 @@
   voorzitter=voorzitter
   secretaris=secretaris
   overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen
-	overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen
+  overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen
   overigePersonenAanwezigen=overigePersonenAanwezigen
-	overigePersonenAfwezigen=overigePersonenAfwezigen
+  overigePersonenAfwezigen=overigePersonenAfwezigen
   propertyToUse=propertyToUse
 }}
