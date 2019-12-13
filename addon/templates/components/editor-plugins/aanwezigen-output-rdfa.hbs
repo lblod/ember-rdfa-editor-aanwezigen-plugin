@@ -1,107 +1,7 @@
 {{#if aanwezigenBijAgendapunt}}
-	<p>
-	  <strong>Aanwezige leden</strong>
-	  <br>
-	  {{#each sortedMandatarissenAanwezigen as |aanwezige|}}
-	    <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
-	      <span property="mandaat:isBestuurlijkeAliasVan" resource={{aanwezige.isBestuurlijkeAliasVan.uri}}>
-	        <span property="persoon:gebruikteVoornaam">
-	          {{aanwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-	        </span>
-	        <span property="foaf:familyName">
-	          {{aanwezige.isBestuurlijkeAliasVan.achternaam}}
-	        </span>
-	      </span>
-	    </span>,&nbsp;
-	  {{/each}}
-	  {{#each sortedPersonenAanwezigen as |aanwezige|}}
-	    <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
-	      <span property="persoon:gebruikteVoornaam">
-	        {{aanwezige.gebruikteVoornaam}}
-	      </span>
-	      <span property="foaf:familyName">
-	        {{aanwezige.achternaam}}
-	      </span>
-	    </span>,&nbsp;
-	  {{/each}}
-	</p>
-	<br>
-
-
-
-	<p>
-	  <strong>Afwezige leden</strong>
-	  <br>
-	  {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
-		  <span class="smaller">Geen</span>
-	  {{/unless}}
-		{{#each sortedMandatarissenAfwezigen as |afwezige|}}
-	    <span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
-	      <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
-	        <span property="persoon:gebruikteVoornaam">
-	          {{afwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-	        </span>
-	        <span property="foaf:familyName">
-	          {{afwezige.isBestuurlijkeAliasVan.achternaam}}
-	        </span>
-	      </span>
-	    </span>,&nbsp;
-	  {{/each}}
-		{{#each sortedPersonenAfwezigen as |afwezige|}}
-			<span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
-				<span property="persoon:gebruikteVoornaam">
-					{{afwezige.gebruikteVoornaam}}
-				</span>
-				<span property="foaf:familyName">
-					{{afwezige.achternaam}}
-				</span>
-			</span>,&nbsp;
-		{{/each}}
-	</p>
-	<br>
-
-
-
-
-	{{#if voorzitter}}
-	  <p>
-	  	<strong>Voorzitter van de zitting</strong>
-	  	<br>
-	    <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
-	      <span property="persoon:gebruikteVoornaam">
-	        {{voorzitter.gebruikteVoornaam}}
-	      </span>
-	      <span property="foaf:familyName">
-	        {{voorzitter.achternaam}}
-	      </span>
-	    </span>
-	  </p>
-	  <br>
-	{{/if}}
-	{{#if secretaris}}
-	  <p>
-	  	<strong>Secretaris van de zitting</strong>
-	  	<br>
-	    {{!-- For now disabled until we have data
-	    <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
-	      <span property="persoon:gebruikteVoornaam">
-	        {{secretaris.gebruikteVoornaam}}
-	      </span>
-	      <span property="foaf:familyName">
-	        {{secretaris.achternaam}}
-	      </span>
-	    </span>
-	    --}}
-	    <span property="ext:secretarisTemporaryAsText">
-	      {{secretaris}}
-	    </span>
-	  </p>
-	  <br>
-	{{/if}}
-{{else}}
   <p>
-	  <strong>Aanwezige leden</strong>
-	  <br>
+    <strong>Aanwezige leden</strong>
+    <br>
     {{#each sortedMandatarissenAanwezigen as |aanwezige|}}
       <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
         <span property="mandaat:isBestuurlijkeAliasVan" resource={{aanwezige.isBestuurlijkeAliasVan.uri}}>
@@ -128,14 +28,15 @@
   <br>
 
 
-	<p>
-	  <strong>Afwezige leden</strong>
-	  <br>
-	  {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
-		  <span class="smaller">Geen</span>
-	  {{/unless}}
+
+  <p>
+    <strong>Afwezige leden</strong>
+    <br>
+    {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
+      <span class="smaller">Geen</span>
+    {{/unless}}
     {{#each sortedMandatarissenAfwezigen as |afwezige|}}
-      <span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+      <span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
         <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
           <span property="persoon:gebruikteVoornaam">
             {{afwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
@@ -146,26 +47,26 @@
         </span>
       </span>,&nbsp;
     {{/each}}
-		{{#each sortedPersonenAfwezigen as |afwezige|}}
-			<span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
-				<span property="persoon:gebruikteVoornaam">
-					{{afwezige.gebruikteVoornaam}}
-				</span>
-				<span property="foaf:familyName">
-					{{afwezige.achternaam}}
-				</span>
-			</span>,&nbsp;
-		{{/each}}
-	</p>
-	<br>
+    {{#each sortedPersonenAfwezigen as |afwezige|}}
+      <span property="ext:heeftAfwezigeBijStart" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{afwezige.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{afwezige.achternaam}}
+        </span>
+      </span>,&nbsp;
+    {{/each}}
+  </p>
+  <br>
 
 
 
 
   {{#if voorzitter}}
     <p>
-    	<strong>Voorzitter</strong>
-    	<br>
+      <strong>Voorzitter van de zitting</strong>
+      <br>
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
           {{voorzitter.gebruikteVoornaam}}
@@ -179,8 +80,107 @@
   {{/if}}
   {{#if secretaris}}
     <p>
-    	<strong>Secretaris</strong>
-    	<br>
+      <strong>Secretaris van de zitting</strong>
+      <br>
+      {{!-- For now disabled until we have data
+      <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{secretaris.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{secretaris.achternaam}}
+        </span>
+      </span>
+      --}}
+      <span property="ext:secretarisTemporaryAsText">
+        {{secretaris}}
+      </span>
+    </p>
+    <br>
+  {{/if}}
+{{else}}
+  <p>
+    <strong>Aanwezige leden</strong>
+    <br>
+    {{#each sortedMandatarissenAanwezigen as |aanwezige|}}
+      <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{aanwezige.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{aanwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{aanwezige.isBestuurlijkeAliasVan.achternaam}}
+          </span>
+        </span>
+      </span>,&nbsp;
+    {{/each}}
+    {{#each sortedPersonenAanwezigen as |aanwezige|}}
+      <span property={{propertyToUse}} resource={{aanwezige.uri}} typeof={{aanwezige.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{aanwezige.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{aanwezige.achternaam}}
+        </span>
+      </span>,&nbsp;
+    {{/each}}
+  </p>
+  <br>
+
+
+  <p>
+    <strong>Afwezige leden</strong>
+    <br>
+    {{#unless (or sortedMandatarissenAfwezigen sortedPersonenAfwezigen)}}
+      <span class="smaller">Geen</span>
+    {{/unless}}
+    {{#each sortedMandatarissenAfwezigen as |afwezige|}}
+      <span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{afwezige.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{afwezige.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{afwezige.isBestuurlijkeAliasVan.achternaam}}
+          </span>
+        </span>
+      </span>,&nbsp;
+    {{/each}}
+    {{#each sortedPersonenAfwezigen as |afwezige|}}
+      <span property="ext:heeftAfwezigeBijAgendapunt" resource={{afwezige.uri}} typeof={{afwezige.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{afwezige.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{afwezige.achternaam}}
+        </span>
+      </span>,&nbsp;
+    {{/each}}
+  </p>
+  <br>
+
+
+
+
+  {{#if voorzitter}}
+    <p>
+      <strong>Voorzitter</strong>
+      <br>
+      <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
+        <span property="persoon:gebruikteVoornaam">
+          {{voorzitter.gebruikteVoornaam}}
+        </span>
+        <span property="foaf:familyName">
+          {{voorzitter.achternaam}}
+        </span>
+      </span>
+    </p>
+    <br>
+  {{/if}}
+  {{#if secretaris}}
+    <p>
+      <strong>Secretaris</strong>
+      <br>
       {{!-- For now disabled until we have data
         <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
         <span property="persoon:gebruikteVoornaam">
