@@ -105,19 +105,11 @@ export default Component.extend({
   },
 
   async setSecretaris(triples){
-    // This is temporarily disabled, since we don't have the data yet
-
-    // let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
-    // if(!triple)
-    //   return;
-    // let persoon = await this.smartFetchPersoon(triple.object);
-
-    //for now it is just free text field
-    let triple = triples.find(t => t.predicate == 'http://mu.semte.ch/vocabularies/ext/secretarisTemporaryAsText');
+    let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
     if(!triple)
       return;
-
-    this.set('secretaris', triple.object.trim());
+    let functionaris = (await this.store.query('functionaris', { 'filter[:uri:]': triple.object } )).firstObject;
+    this.set('secretaris', functionaris);
   },
 
   async setOverigeAanwezigen(triples){
