@@ -82,18 +82,15 @@
     <p>
       <strong>Secretaris van de zitting</strong>
       <br>
-      {{!-- For now disabled until we have data
       <span property="besluit:heeftSecretaris" resource={{secretaris.uri}} typeof={{secretaris.rdfaBindings.class}}>
-        <span property="persoon:gebruikteVoornaam">
-          {{secretaris.gebruikteVoornaam}}
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{secretaris.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{secretaris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{secretaris.isBestuurlijkeAliasVan.achternaam}}
+          </span>
         </span>
-        <span property="foaf:familyName">
-          {{secretaris.achternaam}}
-        </span>
-      </span>
-      --}}
-      <span property="ext:secretarisTemporaryAsText">
-        {{secretaris}}
       </span>
     </p>
     <br>

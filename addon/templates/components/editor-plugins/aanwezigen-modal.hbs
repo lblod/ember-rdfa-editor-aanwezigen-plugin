@@ -31,12 +31,8 @@
       <div class="grid">
         <div class="col--6-12">
           <label class="form__label">
-            Secretaris van de zitting <span class="text-fade">- vrij invulveld</span>
-            {{input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
-              value=secretaris}}
-            {{!-- disable unitil data
-            {{editor-plugins/personen-selector onSelect=(action "selectSecretaris") persoon=secretaris}}
-            --}}
+            Secretaris van de zitting
+            {{editor-plugins/functionaris-selector onSelect=(action "selectSecretaris") functionaris=secretaris bestuurseenheid=this.bestuurseenheid}}
           </label>
         </div>
       </div>

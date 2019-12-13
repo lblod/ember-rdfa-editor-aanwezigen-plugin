@@ -208,8 +208,8 @@ export default Component.extend({
       this.set('voorzitter', persoon);
     },
 
-    selectSecretaris(persoon){
-      this.set('secretaris', persoon);
+    selectSecretaris(functionaris){
+      this.set('secretaris', functionaris);
     },
 
     createPerson(){
