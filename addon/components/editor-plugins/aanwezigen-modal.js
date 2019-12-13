@@ -100,15 +100,15 @@ export default Component.extend({
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftVoorzitter');
     if(!triple)
       return;
-    let persoon = await this.smartFetchPersoon(triple.object);
-    this.set('voorzitter', persoon);
+    let mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': triple.object.trim() } )).firstObject;
+    this.set('voorzitter', mandataris);
   },
 
   async setSecretaris(triples){
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
     if(!triple)
       return;
-    let functionaris = (await this.store.query('functionaris', { 'filter[:uri:]': triple.object } )).firstObject;
+    let functionaris = (await this.store.query('functionaris', { 'filter[:uri:]': triple.object.trim() } )).firstObject;
     this.set('secretaris', functionaris);
   },
 
@@ -196,8 +196,8 @@ export default Component.extend({
   },
 
   actions: {
-    selectVoorzitter(persoon){
-      this.set('voorzitter', persoon);
+    selectVoorzitter(mandataris){
+      this.set('voorzitter', mandataris);
     },
 
     selectSecretaris(functionaris){
