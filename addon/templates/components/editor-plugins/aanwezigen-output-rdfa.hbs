@@ -65,11 +65,13 @@
       <strong>Voorzitter van de zitting</strong>
       <br>
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
-        <span property="persoon:gebruikteVoornaam">
-          {{voorzitter.gebruikteVoornaam}}
-        </span>
-        <span property="foaf:familyName">
-          {{voorzitter.achternaam}}
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{voorzitter.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{voorzitter.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{voorzitter.isBestuurlijkeAliasVan.achternaam}}
+          </span>
         </span>
       </span>
     </p>
@@ -162,11 +164,13 @@
       <strong>Voorzitter</strong>
       <br>
       <span property="besluit:heeftVoorzitter" resource={{voorzitter.uri}} typeof={{voorzitter.rdfaBindings.class}}>
-        <span property="persoon:gebruikteVoornaam">
-          {{voorzitter.gebruikteVoornaam}}
-        </span>
-        <span property="foaf:familyName">
-          {{voorzitter.achternaam}}
+        <span property="mandaat:isBestuurlijkeAliasVan" resource={{voorzitter.isBestuurlijkeAliasVan.uri}}>
+          <span property="persoon:gebruikteVoornaam">
+            {{voorzitter.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </span>
+          <span property="foaf:familyName">
+            {{voorzitter.isBestuurlijkeAliasVan.achternaam}}
+          </span>
         </span>
       </span>
     </p>

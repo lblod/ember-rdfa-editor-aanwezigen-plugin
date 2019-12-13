@@ -6,10 +6,9 @@
    placeholder="Zoek op achternaam"
    allowClear=allowClear
    search=(perform searchByName)
-   selected=_mandataris
+   selected=mandataris
    onchange=(action "select")
    as |mandataris|}}
-  {{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}} {{mandataris.isBestuurlijkeAliasVan.achternaam}},
+  {{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}} {{mandataris.isBestuurlijkeAliasVan.achternaam}}, 
   {{mandataris.bekleedt.bestuursfunctie.label}}
-  {{moment-format mandataris.isBestuurlijkeAliasVan.geboorte.datum 'DD/MM/YYYY'}}
 {{/power-select}}
