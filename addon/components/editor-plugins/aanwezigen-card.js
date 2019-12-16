@@ -64,7 +64,7 @@ export default Component.extend({
     this.set("bestuursorgaanUri", this.findBestuursorgaanUri());
 
     if( !this.bestuursorgaanUri ){
-      warn( "Could not find bestuursorgaan URI" );
+      warn( "Could not find bestuursorgaan URI", {id: 'aanwezigen-plugin.bestuursorgaanUri'} );
     } else {
       this.set('bestuurseenheid',
                await this.queryFirst('bestuurseenheid', {
