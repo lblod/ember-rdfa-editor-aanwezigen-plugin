@@ -1,8 +1,7 @@
 import Service from '@ember/service';
 import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
-import { A, isArray } from '@ember/array';
-import { warn } from '@ember/debug';
+import { A } from '@ember/array';
 
 /**
  * Service responsible for correct insertion and management in notulen
@@ -61,29 +60,28 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
    *
    * @public
    */
+  // eslint-disable-next-line require-yield
   execute: task(function * (hrId, contexts, hintsRegistry, editor) {
     if (contexts.length === 0) return [];
 
     const hints = [];
     for(let context of contexts){
       this.setBestuursorgaanIfSet(context.context);
-      let triple = this.detectRelevantContext(context);
-      if(!triple) continue;
+      let contextResult = this.detectRelevantContext(context);
+      if(!contextResult) continue;
+      const {semanticNode, predicate} = contextResult
 
-      let domNode = this.findDomNodeForContext(editor, context, this.domNodeMatchesRdfaInstructive(triple));
-
-      if(!domNode) continue;
 
       let propertyToUse = this.returnPropertyToUse(context);
 
-      if(triple.predicate == this.insertAanwezigenText) {
+      if(predicate == this.insertAanwezigenText) {
         hintsRegistry.removeHintsInRegion(context.region, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
+        hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor, { propertyToUse }));
       }
-      let domNodeRegion = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
-      if(triple.predicate == this.aanwezigenTable && ! hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
+      let domNodeRegion = [ semanticNode.start, semanticNode.end ];
+      if(predicate == this.aanwezigenTable && ! hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
         hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor, { propertyToUse }));
+        hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor, { propertyToUse }));
       }
     }
 
@@ -104,14 +102,14 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
    *
    * @private
    */
-  detectRelevantContext({ context, semanticNode }) {
+  detectRelevantContext({ semanticNode }) {
     if (semanticNode.rdfaAttributes && semanticNode.rdfaAttributes.properties) {
       const properties = semanticNode.rdfaAttributes.properties || A();
       if (properties.includes(this.insertAanwezigenText)) {
-        return context.find((triple) => triple.predicate === this.insertAanwezigenText);
+        return {semanticNode, predicate: this.insertAanwezigenText}
       }
       if (properties.includes(this.aanwezigenTable)) {
-        return context.find((triple) => triple.predicate === this.aanwezigenTable);
+        return {semanticNode, predicate: this.aanwezigenTable}
       }
     }
   },
@@ -145,8 +143,8 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
         label: 'Voeg tabel van fracties toe',
         plainValue: hint.text,
         location: hint.location,
-        domNodeToUpdate: hint.domNode,
-        instructiveUri: hint.instructiveUri,
+        semanticNodeToUpdate: hint.semanticNode,
+        predicate: hint.predicate,
         editMode: hint.options.editMode,
         propertyToUse: hint.options.propertyToUse,
         hrId, hintsRegistry, editor
@@ -168,46 +166,17 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
    *
    * @private
    */
-  generateHintsForContext(context, instructiveTriple, domNode, editor, options = {}){
+  generateHintsForContext(context, predicate, semanticNode, editor, options = {}){
     const hints = [];
     const text = context.text || '';
     let location = context.region;
-    if(instructiveTriple.predicate == this.aanwezigenTable){
-      location = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
+    if(predicate == this.aanwezigenTable){
+      location = [ semanticNode.start, semanticNode.end ];
       options.noHighlight = true;
       options.editMode = true;
     }
-    hints.push({text, location, domNode, instructiveUri: instructiveTriple.predicate, options});
+    hints.push({text, location, semanticNode, predicate, options});
     return hints;
-  },
-
-  ascendDomNodesUntil(rootNode, domNode, condition){
-    if(!domNode || rootNode.isEqualNode(domNode)) return null;
-    if(!condition(domNode))
-      return this.ascendDomNodesUntil(rootNode, domNode.parentElement, condition);
-    return domNode;
-  },
-
-  domNodeMatchesRdfaInstructive(instructiveRdfa){
-    let ext = 'http://mu.semte.ch/vocabularies/ext/';
-    return (domNode) => {
-      if(!domNode.attributes || !domNode.attributes.property)
-        return false;
-      let expandedProperty = domNode.attributes.property.value.replace('ext:', ext);
-      if(instructiveRdfa.predicate == expandedProperty)
-        return true;
-      return false;
-    };
-  },
-
-  findDomNodeForContext(editor, context, condition){
-    let domNode = context.richNodes
-          .map(r => this.ascendDomNodesUntil(editor.rootNode, r.domNode, condition))
-          .find(d => d);
-    if(!domNode){
-      warn(`Trying to work on unattached domNode. Sorry can't handle these...`, {id: 'aanwezigen.domNode'});
-    }
-    return domNode;
   },
 
   setBestuursorgaanIfSet(triples) {
