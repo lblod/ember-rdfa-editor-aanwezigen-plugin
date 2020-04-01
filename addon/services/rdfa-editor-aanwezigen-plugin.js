@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import EmberObject from '@ember/object';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import { A } from '@ember/array';
 
 /**
@@ -44,9 +44,12 @@ import { A } from '@ember/array';
  * @constructor
  * @extends EmberService
  */
-const RdfaEditorAanwezigenPlugin = Service.extend({
-  insertAanwezigenText: 'http://mu.semte.ch/vocabularies/ext/insertAanwezigenText',
-  aanwezigenTable: 'http://mu.semte.ch/vocabularies/ext/aanwezigenTable',
+class RdfaEditorAanwezigenPlugin extends Service {
+  constructor() {
+    super(...arguments)
+    this.insertAanwezigenText = 'http://mu.semte.ch/vocabularies/ext/insertAanwezigenText';
+    this.aanwezigenTable = 'http://mu.semte.ch/vocabularies/ext/aanwezigenTable';
+  }
 
   /**
    * Restartable task to handle the incoming events from the editor dispatcher
@@ -60,8 +63,10 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
    *
    * @public
    */
+  
+  @task
   // eslint-disable-next-line require-yield
-  execute: task(function * (hrId, contexts, hintsRegistry, editor) {
+  *execute(hrId, contexts, hintsRegistry, editor) {
     if (contexts.length === 0) return [];
 
     const hints = [];
@@ -88,7 +93,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     if(cards.length > 0){
       hintsRegistry.addHints(hrId, this.who, cards);
     }
-  }),
+  }
 
   /**
    * Given context object, tries to detect a context the plugin can work on
@@ -111,16 +116,17 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
         return {semanticNode, predicate: this.aanwezigenTable};
       }
     }
-  },
+  }
 
   returnPropertyToUse(context){
     let triples = context.context.slice().reverse();
     for(let triple of triples){
-      if(triple.predicate == 'a' && triple.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt')
+      if(triple.predicate == 'a' && triple.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt') {
         return 'besluit:heeftAanwezige';
+      }
     }
     return 'besluit:heeftAanwezigeBijStart';
-  },
+  }
 
   /**
    * Generates a card given a hint
@@ -152,7 +158,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
       options: hint.options,
       card: cardName
     });
-  },
+  }
 
   /**
    * Generates a hint, given a context
@@ -176,7 +182,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     }
     hints.push({text, location, semanticNode, predicate, options});
     return hints;
-  },
+  }
 
   setBestuursorgaanIfSet(triples) {
     const zitting = triples.find((triple) => triple.object === 'http://data.vlaanderen.be/ns/besluit#Zitting');
@@ -187,7 +193,8 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
       }
     }
   }
-});
+
+}
 
 RdfaEditorAanwezigenPlugin.reopen({
   who: 'editor-plugins/aanwezigen-card'
