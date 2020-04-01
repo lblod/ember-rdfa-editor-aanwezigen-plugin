@@ -13,7 +13,7 @@
 {{/unless}}
 
 {{#if (is-equal viewMode 'default')}}
-  {{#if loadData.isRunning}}
+  {{#unless tableDataReady}}
     <p>Bezig met laden van de aanwezigenlijst</p>
     <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
   {{else}}
@@ -57,7 +57,7 @@
         }}
       </div>
     {{/if}}
-  {{/if}}
+  {{/unless}}
 {{/if}}
 {{yield}}
 

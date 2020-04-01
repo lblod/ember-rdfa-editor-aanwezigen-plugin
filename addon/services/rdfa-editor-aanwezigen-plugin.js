@@ -69,8 +69,7 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
       this.setBestuursorgaanIfSet(context.context);
       let contextResult = this.detectRelevantContext(context);
       if(!contextResult) continue;
-      const {semanticNode, predicate} = contextResult
-
+      const {semanticNode, predicate} = contextResult;
 
       let propertyToUse = this.returnPropertyToUse(context);
 
@@ -106,10 +105,10 @@ const RdfaEditorAanwezigenPlugin = Service.extend({
     if (semanticNode.rdfaAttributes && semanticNode.rdfaAttributes.properties) {
       const properties = semanticNode.rdfaAttributes.properties || A();
       if (properties.includes(this.insertAanwezigenText)) {
-        return {semanticNode, predicate: this.insertAanwezigenText}
+        return {semanticNode, predicate: this.insertAanwezigenText};
       }
       if (properties.includes(this.aanwezigenTable)) {
-        return {semanticNode, predicate: this.aanwezigenTable}
+        return {semanticNode, predicate: this.aanwezigenTable};
       }
     }
   },
