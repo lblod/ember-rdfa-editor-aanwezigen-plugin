@@ -118,10 +118,11 @@ export default Component.extend({
     insert(){
       const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
       this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-      this.get('editor').replaceNodeWithHTML(this.info.domNodeToUpdate, html);
+      const selections = this.editor.selectHighlight(this.location)
+      this.get('editor').update(selections, {set: {innerHTML: html}})
     },
     togglePopup(){
-       this.toggleProperty('popup');
+      this.toggleProperty('popup');
     }
   }
 });
