@@ -310,8 +310,7 @@ export default class AanwezigenCard extends Component {
   }
 
   didReceiveAttrs() {
-    console.log(this.loadData)
-    this._super(...arguments);
+    super(...arguments);
     if(this.editor)
       this.loadData.perform();
   }
