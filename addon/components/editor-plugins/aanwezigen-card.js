@@ -1,12 +1,12 @@
 import { warn } from '@ember/debug';
-import { computed } from '@ember/object';
-import { reads } from '@ember/object/computed';
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/aanwezigen-card';
 import { A } from '@ember/array';
 import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa/rdfa-context-scanner';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 /**
 * Card displaying a hint of the Date plugin
@@ -15,21 +15,29 @@ import { inject as service } from '@ember/service';
 * @class AanwezigenCard
 * @extends Ember.Component
 */
-export default Component.extend({
-  layout,
-  expandedExt: 'http://mu.semte.ch/vocabularies/ext/',
-  outputId: computed('id', function() {
+export default class AanwezigenCard extends Component {
+  constructor() {
+    super(...arguments)
+    this.layout = layout
+    this.expandedExt = 'http://mu.semte.ch/vocabularies/ext/'
+  }
+
+  @tracked id;
+  @service store;
+  @service rdfaEditorAanwezigenPlugin;
+
+
+  get outputId() {
     return `output-fractie-tabel-${this.elementId}`;
-  }),
-  store: service(),
-  rdfaEditorAanwezigenPlugin: service(),
+  }
+
   /**
    * Region on which the card applies
    * @property location
    * @type [number,number]
    * @private
   */
-  location: reads('info.location'),
+  @tracked location = this.info.location;
 
   /**
    * Unique identifier of the event in the hints registry
@@ -37,7 +45,7 @@ export default Component.extend({
    * @type Object
    * @private
   */
-  hrId: reads('info.hrId'),
+  @tracked hrId =  this.info.hrId;
 
   /**
    * The RDFa editor instance
@@ -45,7 +53,7 @@ export default Component.extend({
    * @type RdfaEditor
    * @private
   */
-  editor: reads('info.editor'),
+  @tracked editor = this.info.editor;
 
   /**
    * Hints registry storing the cards
@@ -53,15 +61,14 @@ export default Component.extend({
    * @type HintsRegistry
    * @private
   */
-  hintsRegistry: reads('info.hintsRegistry'),
-  popup: false,
+  @tracked hintsRegistry = this.info.hintsRegistry;
 
   /**
    * Query for a record in the store and yield the first item
    */
   async queryFirst( kind, filter ) {
     return (await this.store.query( kind, filter )).firstObject;
-  },
+  }
 
   async setProperties() {
     this.set("bestuursorgaanUri", this.findBestuursorgaanUri());
@@ -69,17 +76,17 @@ export default Component.extend({
     if( !this.bestuursorgaanUri ){
       warn( "Could not find bestuursorgaan URI", {id: 'aanwezigen-plugin.bestuursorgaanUri'} );
     } else {
-      this.set('bestuurseenheid',
-               await this.queryFirst('bestuurseenheid', {
-                 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri
-               }));
+      const bestuurseenheid = await this.queryFirst('bestuurseenheid', {
+        'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri
+      })
+      this.set('bestuurseenheid',bestuurseenheid);
 
-      this.set('bestuursorgaan',
-               await this.queryFirst('bestuursorgaan', {
-                 'filter[:uri:]': this.bestuursorgaanUri
-               }));
+      const bestuursorgaan = await this.queryFirst('bestuursorgaan', {
+        'filter[:uri:]': this.bestuursorgaanUri
+      })
+      this.set('bestuursorgaan', bestuursorgaan);
     }
-  },
+  }
 
   findBestuursorgaanUri() {
     const rdfaBlocks = this.editor.getContexts();
@@ -96,22 +103,26 @@ export default Component.extend({
       }
     }
     return null;
-  },
+  }
 
   createWrappingHTML(innerHTML){
     //workaround for triggering updates
-    return `<div property="ext:aanwezigenTable">
-                    <span class="u-hidden">${new Date().toISOString()}</span>
-                    ${innerHTML}
-                    <span class="u-hidden">${new Date().toISOString() + '1'}</span>
-            </div>`;
-  },
+    return `
+      <div property="ext:aanwezigenTable">
+        <span class="u-hidden">${new Date().toISOString()}</span>
+        ${innerHTML}
+        <span class="u-hidden">${new Date().toISOString() + '1'}</span>
+      </div>
+    `;
+  }
 
-  loadData: task(function *(){
+  @task 
+  *loadData() {
     yield this.setProperties();
-  }),
+  }
 
-  loadDataForPopup: task(function* (){
+  @task
+  *loadDataForPopup(){
     const domData = this.editTable ? this.domTable: this.fetchDataFromPrevious();
     let triples = this.serializeTableToTriples(domData);
     yield this.setCachedMandatarissen();
@@ -125,14 +136,14 @@ export default Component.extend({
     yield this.setOverigeAanwezigen(triples);
     yield this.setOverigeAfwezigen(triples);
     this.set('tableDataReady', true);
-  }),
+  }
 
   fetchDataFromPrevious(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
       return previousTables[previousTables.length - 1];
     return null;
-  },
+  }
 
   serializeTableToTriples(table){
     const contextScanner = RdfaContextScanner.create({});
@@ -140,7 +151,7 @@ export default Component.extend({
     if(contexts.length == 0)
       return [];
     return [].concat.apply([], contexts);
-  },
+  }
 
   async setCachedMandatarissen(){
     const bestuursorgaanIsTijdsspecialisatieVan = await this.bestuursorgaan.get('isTijdsspecialisatieVan');
@@ -158,7 +169,7 @@ export default Component.extend({
 
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
     this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
-  },
+  }
 
   async setCachedPersonen(){
     //a subset of personen of interest
@@ -184,7 +195,7 @@ export default Component.extend({
     );
 
     this.set('cachedPersonen', resultaten.map((res) => res.isResultaatVan) || A());
-  },
+  }
 
   async setVoorzitter(triples){
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftVoorzitter');
@@ -192,7 +203,7 @@ export default Component.extend({
       return;
     let mandataris = (await this.store.query('mandataris', { 'filter[:uri:]': triple.object.trim() } )).firstObject;
     this.set('voorzitter', mandataris);
-  },
+  }
 
   async setSecretaris(triples){
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftSecretaris');
@@ -200,7 +211,7 @@ export default Component.extend({
       return;
     let functionaris = (await this.store.query('functionaris', { 'filter[:uri:]': triple.object.trim() } )).firstObject;
     this.set('secretaris', functionaris);
-  },
+  }
 
   async setOverigeAanwezigen(triples){
     let overigePersonenAanwezigen = A();
@@ -230,7 +241,7 @@ export default Component.extend({
 
     this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
     this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
-  },
+  }
 
   async setOverigeAfwezigen(triples){
     let overigePersonenAfwezigen = A();
@@ -257,7 +268,7 @@ export default Component.extend({
 
     this.set('overigePersonenAfwezigen', overigePersonenAfwezigen);
     this.set('overigeMandatarissenAfwezigen', overigeMandatarissenAfwezigen);
-  },
+  }
 
   async smartFetchMandataris(subjectUri){
     let mandataris = this.cachedMandatarissen.find(p => p.get('uri') == subjectUri);
@@ -279,7 +290,7 @@ export default Component.extend({
     this.cachedMandatarissen.pushObject(mandataris);
 
     return mandataris;
-  },
+  }
 
   async smartFetchPersoon(subjectUri){
     let persoon = null;
@@ -296,25 +307,28 @@ export default Component.extend({
     this.cachedPersonen.pushObject(persoon);
 
     return persoon;
-  },
+  }
 
   didReceiveAttrs() {
+    console.log(this.loadData)
     this._super(...arguments);
     if(this.editor)
       this.loadData.perform();
-  },
-
-  actions: {
-    insert(){
-      const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
-      this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-      this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location)
-      const selections = this.editor.selectHighlight(this.location);
-      this.get('editor').update(selections, {set: {innerHTML: html}});
-    },
-    togglePopup(){
-      this.loadDataForPopup.perform();
-      this.toggleProperty('popup');
-    }
   }
-});
+
+  @action
+  insert(){
+    const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
+    this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
+    this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location)
+    const selections = this.editor.selectHighlight(this.location);
+    this.get('editor').update(selections, {set: {innerHTML: html}});
+  }
+
+  @action
+  togglePopup(){
+    this.loadDataForPopup.perform();
+    this.toggleProperty('popup');
+  }
+
+}
