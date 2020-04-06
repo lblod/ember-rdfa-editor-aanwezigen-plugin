@@ -46,7 +46,7 @@ import { A } from '@ember/array';
  */
 class RdfaEditorAanwezigenPlugin extends Service {
   constructor() {
-    super(...arguments)
+    super(...arguments);
     this.insertAanwezigenText = 'http://mu.semte.ch/vocabularies/ext/insertAanwezigenText';
     this.aanwezigenTable = 'http://mu.semte.ch/vocabularies/ext/aanwezigenTable';
   }

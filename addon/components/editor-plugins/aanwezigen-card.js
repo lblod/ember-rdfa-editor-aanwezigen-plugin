@@ -17,9 +17,9 @@ import { tracked } from '@glimmer/tracking';
 */
 export default class AanwezigenCard extends Component {
   constructor() {
-    super(...arguments)
-    this.layout = layout
-    this.expandedExt = 'http://mu.semte.ch/vocabularies/ext/'
+    super(...arguments);
+    this.layout = layout;
+    this.expandedExt = 'http://mu.semte.ch/vocabularies/ext/';
   }
 
   @tracked id;
@@ -78,12 +78,12 @@ export default class AanwezigenCard extends Component {
     } else {
       const bestuurseenheid = await this.queryFirst('bestuurseenheid', {
         'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri
-      })
+      });
       this.set('bestuurseenheid',bestuurseenheid);
 
       const bestuursorgaan = await this.queryFirst('bestuursorgaan', {
         'filter[:uri:]': this.bestuursorgaanUri
-      })
+      });
       this.set('bestuursorgaan', bestuursorgaan);
     }
   }
@@ -311,18 +311,17 @@ export default class AanwezigenCard extends Component {
 
   didReceiveAttrs() {
     super.didReceiveAttrs(...arguments);
-    if(this.editor)
+    if(this.editor) {
       this.loadData.perform();
+    }
   }
 
   @action
   insert(){
     const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
     this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-    this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location)
+    this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location);
     const selections = this.editor.selectHighlight(this.location);
-    console.log(selections)
-    console.log(html)
     this.get('editor').update(selections, {set: {innerHTML: html}});
   }
 
