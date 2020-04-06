@@ -310,7 +310,7 @@ export default class AanwezigenCard extends Component {
   }
 
   didReceiveAttrs() {
-    super(...arguments);
+    super.didReceiveAttrs(...arguments);
     if(this.editor)
       this.loadData.perform();
   }
@@ -321,6 +321,8 @@ export default class AanwezigenCard extends Component {
     this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
     this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location)
     const selections = this.editor.selectHighlight(this.location);
+    console.log(selections)
+    console.log(html)
     this.get('editor').update(selections, {set: {innerHTML: html}});
   }
 
