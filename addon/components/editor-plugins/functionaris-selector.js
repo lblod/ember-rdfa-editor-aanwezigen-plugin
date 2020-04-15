@@ -1,15 +1,23 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/functionaris-selector';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { reads } from '@ember/object/computed';
 
-export default Component.extend({
-  layout,
-  store: service(),
-  bestuurseenheidUri: reads('bestuurseenheid.uri'),
+export default class FunctionarisSelector extends Component {
 
-  searchByName: task(function* (searchData) {
+  @service store
+
+  constructor() {
+    super(...arguments);
+    this.layout = layout;
+    this.bestuurseenheidUri = reads('bestuurseenheid.uri');
+  }
+
+  @task
+  *searchByName(searchData) {
     yield timeout(300);
     let queryParams = {
       sort: 'is-bestuurlijke-alias-van.achternaam',
@@ -18,12 +26,10 @@ export default Component.extend({
       page: { size: 100 }
     };
     return yield this.store.query('functionaris', queryParams);
-  }),
+  }
 
-  actions: {
-    select(functionaris){
-      this.onSelect(functionaris);
-    }
+  @action
+  select(functionaris){
+    this.onSelect(functionaris);
+  }
 }
-
-});
