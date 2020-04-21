@@ -9,7 +9,15 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 /**
-* Card displaying a hint of the Date plugin
+* Card displaying a hint of the aanwezigen plugin
+*
+* Some TODO's I won't fix today
+* - There are now 4 lists: personenAanwezigen, mandatarissenAanwezigen, personenAfwezigen, mandatarissenAfwezigen.
+*   this could be simplified to max two lists
+* - There are still some editor <-> plugin interactions that are not supported by Pernet (or editorApi)
+*    - Get the triples from the previous table to pre-fill for the user the list of aanwezigen.
+*    - editor.selectContexts is still used
+* - some naming does not make sense i.e. the 'overige-*' you find everywhere. It should be removed
 *
 * @module editor-aanwezigen-plugin
 * @class AanwezigenCard
@@ -134,7 +142,7 @@ export default class AanwezigenCard extends Component {
       triples = this.serializeTableToTriples(this.getDomNodePreviousTable());
     }
 
-    yield this.setCachedMandatarissen();
+    yield this.setPrepopulatedMandatarissen();
     this.set('cachedPersonen', A());
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
@@ -144,7 +152,7 @@ export default class AanwezigenCard extends Component {
     //On initial load of the plugin, there will be no one marked as presen or absent.
     //For UX we prepopulate the list
     if(!(this.mandatarissenAanwezigen.length && this.mandatarissenAfwezigen.length)){
-      this.mandatarissenAanwezigen.setObjects(this.cachedMandatarissen);
+      this.mandatarissenAanwezigen.setObjects(this.prepopulatedMandatarissen);
    }
     this.set('tableDataReady', true);
   }
@@ -169,7 +177,9 @@ export default class AanwezigenCard extends Component {
     return [].concat.apply([], contexts);
   }
 
-  async setCachedMandatarissen(){
+  async setPrepopulatedMandatarissen(){
+    //This method sets a sensible default of mandatarissen for the enduser to select from
+    //If the enduser wants to have a mandataris outside this list, he will be provided a 'look further' functionality ('voeg mandataris toe')
     const bestuursorgaanIsTijdsspecialisatieVan = await this.bestuursorgaan.get('isTijdsspecialisatieVan');
     const classificatieCode = await bestuursorgaanIsTijdsspecialisatieVan.get('classificatie');
     const defaultTypes =  await classificatieCode.get('standaardType');
@@ -184,7 +194,7 @@ export default class AanwezigenCard extends Component {
     };
 
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
-    this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
+    this.set('prepopulatedMandatarissen', mandatarissenInPeriode.toArray() || A());
   }
 
   async setVoorzitter(triples){
@@ -252,7 +262,7 @@ export default class AanwezigenCard extends Component {
   }
 
   async smartFetchMandataris(subjectUri){
-    let mandataris = this.cachedMandatarissen.find(p => p.get('uri') == subjectUri);
+    let mandataris = this.prepopulatedMandatarissen.find(p => p.get('uri') == subjectUri);
     if(mandataris) {
       return mandataris;
     }
@@ -268,7 +278,7 @@ export default class AanwezigenCard extends Component {
       return null;
 
     //set cache so it may be found later
-    this.cachedMandatarissen.pushObject(mandataris);
+    this.prepopulatedMandatarissen.pushObject(mandataris);
 
     return mandataris;
   }
