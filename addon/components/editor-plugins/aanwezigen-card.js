@@ -186,33 +186,7 @@ export default class AanwezigenCard extends Component {
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
     this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
   }
-
-  async setCachedPersonen(){
-    //a subset of personen of interest
-    let resultaten = await this.store.query(
-      'verkiezingsresultaat',
-      {
-        filter: {
-          'is-resultaat-voor' : {
-            'rechtstreekse-verkiezing': {
-              'stelt-samen': {
-                ':uri:': this.bestuursorgaan.uri
-              }
-            }
-          },
-          'gevolg': {
-            ':uri:': this.verkozenGevolgUri
-          }
-        },
-        include: 'is-resultaat-van.geboorte',
-        page: { size: 1000 },
-        sort:'is-resultaat-van.gebruikte-voornaam'
-      }
-    );
-
-    this.set('cachedPersonen', resultaten.map((res) => res.isResultaatVan) || A());
-  }
-
+  
   async setVoorzitter(triples){
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftVoorzitter');
     if(!triple)
