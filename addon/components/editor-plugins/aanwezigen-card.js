@@ -123,8 +123,17 @@ export default class AanwezigenCard extends Component {
 
   @task
   *loadDataForPopup(){
-    const domData = this.editTable ? this.domTable: this.fetchDataFromPrevious();
-    let triples = this.serializeTableToTriples(domData);
+    let triples = [];
+    if(this.info.editMode){
+      //we need load the triples from the current table.
+      const currLocation = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location);
+      const rdfaBlocks = this.editor.getContexts({region: currLocation});
+      triples = this.rdfaBlocksToTriples(rdfaBlocks);
+    }
+    else {
+      triples = this.serializeTableToTriples(this.getDomNodePreviousTable());
+    }
+
     yield this.setCachedMandatarissen();
     if(this.cachedMandatarissen.length == 0) {
       yield this.setCachedPersonen();
@@ -144,7 +153,7 @@ export default class AanwezigenCard extends Component {
     this.set('tableDataReady', true);
   }
 
-  fetchDataFromPrevious(){
+  getDomNodePreviousTable(){
     let previousTables = document.querySelectorAll("[property='ext:aanwezigenTable']");
     if(previousTables.length > 0)
       return previousTables[previousTables.length - 1];
@@ -153,7 +162,12 @@ export default class AanwezigenCard extends Component {
 
   serializeTableToTriples(table){
     const contextScanner = RdfaContextScanner.create({});
-    const contexts = contextScanner.analyse(table).map((c) => c.context);
+    const rdfaBlocks = contextScanner.analyse(table);
+    return this.rdfaBlocksToTriples(rdfaBlocks);
+  }
+
+  rdfaBlocksToTriples(rdfaBlocks){
+    const contexts = rdfaBlocks.map((c) => c.context);
     if(contexts.length == 0)
       return [];
     return [].concat.apply([], contexts);
@@ -244,7 +258,6 @@ export default class AanwezigenCard extends Component {
           overigePersonenAanwezigen.pushObject(persoon);
       }
     }
-
     this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
     this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
   }
