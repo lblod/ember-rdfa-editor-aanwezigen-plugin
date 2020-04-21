@@ -228,7 +228,7 @@ export default class AanwezigenCard extends Component {
         continue;
       }
 
-      const persoon = await this.smartFetchPersoon(uri);
+      const persoon = await this.fetchPersoon(uri);
       if(persoon)
         personenAanwezigen.pushObject(persoon);
     }
@@ -251,7 +251,7 @@ export default class AanwezigenCard extends Component {
         continue;
       }
 
-      let persoon = await this.smartFetchPersoon(uri);
+      let persoon = await this.fetchPersoon(uri);
       if(persoon) {
         personenAfwezigen.pushObject(persoon);
       }
@@ -283,21 +283,8 @@ export default class AanwezigenCard extends Component {
     return mandataris;
   }
 
-  async smartFetchPersoon(subjectUri){
-    let persoon = null;
-    if(this.cachedPersonen) (persoon = this.cachedPersonen.find(p => p.get('uri') == subjectUri));
-
-    if(persoon)
-      return persoon;
-    //if not existant try to create it on based on information in triples
-    persoon = (await this.store.query('persoon', { 'filter[:uri:]': subjectUri })).firstObject;
-    if(!persoon)
-      return null;
-
-    //set cache so it may be found later
-    this.cachedPersonen.pushObject(persoon);
-
-    return persoon;
+  async fetchPersoon(subjectUri){
+    return (await this.store.query('persoon', { 'filter[:uri:]': subjectUri })).firstObject;
   }
 
   didReceiveAttrs() {
