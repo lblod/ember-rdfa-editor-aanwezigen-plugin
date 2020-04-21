@@ -135,11 +135,7 @@ export default class AanwezigenCard extends Component {
     }
 
     yield this.setCachedMandatarissen();
-    if(this.cachedMandatarissen.length == 0) {
-      yield this.setCachedPersonen();
-    } else {
-      this.set('cachedPersonen', A());
-    }
+    this.set('cachedPersonen', A());
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);
@@ -241,22 +237,16 @@ export default class AanwezigenCard extends Component {
           .map(t =>  t.object);
     subset = Array.from(new Set(subset));
     for(let uri of subset){
-      if(this.cachedMandatarissen.length > 0) {
-        const mandataris = await this.smartFetchMandataris(uri);
-        if(mandataris)
-          overigeMandatarissenAanwezigen.pushObject(mandataris);
-        else {
-          const persoon = await this.smartFetchPersoon(uri);
-          if(persoon)
-            overigePersonenAanwezigen.pushObject(persoon);
-        }
+
+      const mandataris = await this.smartFetchMandataris(uri);
+      if(mandataris){
+        overigeMandatarissenAanwezigen.pushObject(mandataris);
+        continue;
       }
 
-      if((this.cachedPersonen.length > 0) && (overigeMandatarissenAanwezigen.length > 0)) {
-        const persoon = await this.smartFetchPersoon(uri);
-        if(persoon)
-          overigePersonenAanwezigen.pushObject(persoon);
-      }
+      const persoon = await this.smartFetchPersoon(uri);
+      if(persoon)
+        overigePersonenAanwezigen.pushObject(persoon);
     }
     this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
     this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
@@ -271,17 +261,15 @@ export default class AanwezigenCard extends Component {
     ).map(t =>  t.object);
     subset = Array.from(new Set(subset));
     for(let uri of subset){
-      if(this.cachedMandatarissen.length > 0) {
-        let mandataris = await this.smartFetchMandataris(uri);
-        if(mandataris)
-          overigeMandatarissenAfwezigen.pushObject(mandataris);
+      let mandataris = await this.smartFetchMandataris(uri);
+      if(mandataris){
+        overigeMandatarissenAfwezigen.pushObject(mandataris);
+        continue;
       }
 
-      if(this.cachedPersonen.length > 0) {
-        let persoon = await this.smartFetchPersoon(uri);
-        if(persoon) {
-          overigePersonenAfwezigen.pushObject(persoon);
-        }
+      let persoon = await this.smartFetchPersoon(uri);
+      if(persoon) {
+        overigePersonenAfwezigen.pushObject(persoon);
       }
     }
 
