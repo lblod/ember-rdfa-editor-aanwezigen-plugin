@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/functionaris-selector';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { reads } from '@ember/object/computed';
