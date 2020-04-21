@@ -348,4 +348,17 @@ export default class AanwezigenCard extends Component {
     this.overigeMandatarissenAanwezigen.removeObject(mandataris);
     this.overigeMandatarissenAfwezigen.pushObject(mandataris);
   }
+
+  @action
+  addAanwezigePersoon(persoon){
+    this.overigePersonenAanwezigen.pushObject(persoon);
+    this.overigePersonenAfwezigen.removeObject(persoon);
+  }
+
+  @action
+  removeAanwezigePersoon(persoon){
+    this.overigePersonenAanwezigen.removeObject(persoon);
+    this.overigePersonenAfwezigen.pushObject(persoon);
+  }
+
 }

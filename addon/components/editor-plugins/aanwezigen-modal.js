@@ -52,4 +52,14 @@ export default class AanwezigenModal extends Component {
   removeAanwezigeMandataris(mandataris){
     this.onRemoveAanwezigeMandataris(mandataris);
   }
+
+  @action
+  addAanwezigePersoon(persoon){
+    this.onAddAanwezigePersoon(persoon);
+  }
+
+  @action
+  removeAanwezigePersoon(persoon){
+    this.onRemoveAanwezigePersoon(persoon);
+  }
 }
