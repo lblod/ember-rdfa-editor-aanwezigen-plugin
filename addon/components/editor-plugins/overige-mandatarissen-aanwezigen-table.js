@@ -10,14 +10,14 @@ export default Component.extend({
   store: service(),
 
   /** list of mandatarissen that are present **/
-  overigeMandatarissenAanwezigen: null,
+  mandatarissenAanwezigen: null,
   /** list of mandatarissen that are not present **/
-  overigeMandatarissenAfwezigen: null,
+  mandatarissenAfwezigen: null,
   /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
   cachedMandatarissen: null,
 
-  aanwezigenToSelect: computed('overigeMandatarissenAanwezigen.[]', 'overigeMandatarissenAfwezigen.[]', function(){
-    const listForTable = this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [], []);
+  aanwezigenToSelect: computed('mandatarissenAanwezigen.[]', 'mandatarissenAfwezigen.[]', function(){
+    const listForTable = this.mergeAanwezigeStatus(this.mandatarissenAanwezigen || [], this.mandatarissenAfwezigen || [], []);
     return listForTable.sort(this.sortBuildAanwezige);
   }),
 

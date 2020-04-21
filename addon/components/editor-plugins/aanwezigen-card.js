@@ -143,8 +143,8 @@ export default class AanwezigenCard extends Component {
 
     //On initial load of the plugin, there will be no one marked as presen or absent.
     //For UX we prepopulate the list
-    if(!(this.overigeMandatarissenAanwezigen.length && this.overigeMandatarissenAfwezigen.length)){
-      this.overigeMandatarissenAanwezigen.setObjects(this.cachedMandatarissen);
+    if(!(this.mandatarissenAanwezigen.length && this.mandatarissenAfwezigen.length)){
+      this.mandatarissenAanwezigen.setObjects(this.cachedMandatarissen);
    }
     this.set('tableDataReady', true);
   }
@@ -186,7 +186,7 @@ export default class AanwezigenCard extends Component {
     let mandatarissenInPeriode = await this.store.query('mandataris', queryParams);
     this.set('cachedMandatarissen', mandatarissenInPeriode.toArray() || A());
   }
-  
+
   async setVoorzitter(triples){
     let triple = triples.find(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftVoorzitter');
     if(!triple)
@@ -204,8 +204,8 @@ export default class AanwezigenCard extends Component {
   }
 
   async setOverigeAanwezigen(triples){
-    let overigePersonenAanwezigen = A();
-    let overigeMandatarissenAanwezigen = A();
+    let personenAanwezigen = A();
+    let mandatarissenAanwezigen = A();
     let subset = triples.filter(t => t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezige'
                                 || t.predicate == 'http://data.vlaanderen.be/ns/besluit#heeftAanwezigeBijStart')
           .map(t =>  t.object);
@@ -214,21 +214,21 @@ export default class AanwezigenCard extends Component {
 
       const mandataris = await this.smartFetchMandataris(uri);
       if(mandataris){
-        overigeMandatarissenAanwezigen.pushObject(mandataris);
+        mandatarissenAanwezigen.pushObject(mandataris);
         continue;
       }
 
       const persoon = await this.smartFetchPersoon(uri);
       if(persoon)
-        overigePersonenAanwezigen.pushObject(persoon);
+        personenAanwezigen.pushObject(persoon);
     }
-    this.set('overigePersonenAanwezigen', overigePersonenAanwezigen);
-    this.set('overigeMandatarissenAanwezigen', overigeMandatarissenAanwezigen);
+    this.set('personenAanwezigen', personenAanwezigen);
+    this.set('mandatarissenAanwezigen', mandatarissenAanwezigen);
   }
 
   async setOverigeAfwezigen(triples){
-    let overigePersonenAfwezigen = A();
-    let overigeMandatarissenAfwezigen = A();
+    let personenAfwezigen = A();
+    let mandatarissenAfwezigen = A();
     let subset = triples.filter(t =>
       t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijAgendapunt'||
       t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijStart'
@@ -237,18 +237,18 @@ export default class AanwezigenCard extends Component {
     for(let uri of subset){
       let mandataris = await this.smartFetchMandataris(uri);
       if(mandataris){
-        overigeMandatarissenAfwezigen.pushObject(mandataris);
+        mandatarissenAfwezigen.pushObject(mandataris);
         continue;
       }
 
       let persoon = await this.smartFetchPersoon(uri);
       if(persoon) {
-        overigePersonenAfwezigen.pushObject(persoon);
+        personenAfwezigen.pushObject(persoon);
       }
     }
 
-    this.set('overigePersonenAfwezigen', overigePersonenAfwezigen);
-    this.set('overigeMandatarissenAfwezigen', overigeMandatarissenAfwezigen);
+    this.set('personenAfwezigen', personenAfwezigen);
+    this.set('mandatarissenAfwezigen', mandatarissenAfwezigen);
   }
 
   async smartFetchMandataris(subjectUri){
@@ -314,26 +314,26 @@ export default class AanwezigenCard extends Component {
 
   @action
   addAanwezigeMandataris(mandataris){
-    this.overigeMandatarissenAanwezigen.pushObject(mandataris);
-    this.overigeMandatarissenAfwezigen.removeObject(mandataris);
+    this.mandatarissenAanwezigen.pushObject(mandataris);
+    this.mandatarissenAfwezigen.removeObject(mandataris);
   }
 
   @action
   removeAanwezigeMandataris(mandataris){
-    this.overigeMandatarissenAanwezigen.removeObject(mandataris);
-    this.overigeMandatarissenAfwezigen.pushObject(mandataris);
+    this.mandatarissenAanwezigen.removeObject(mandataris);
+    this.mandatarissenAfwezigen.pushObject(mandataris);
   }
 
   @action
   addAanwezigePersoon(persoon){
-    this.overigePersonenAanwezigen.pushObject(persoon);
-    this.overigePersonenAfwezigen.removeObject(persoon);
+    this.personenAanwezigen.pushObject(persoon);
+    this.personenAfwezigen.removeObject(persoon);
   }
 
   @action
   removeAanwezigePersoon(persoon){
-    this.overigePersonenAanwezigen.removeObject(persoon);
-    this.overigePersonenAfwezigen.pushObject(persoon);
+    this.personenAanwezigen.removeObject(persoon);
+    this.personenAfwezigen.pushObject(persoon);
   }
 
 }

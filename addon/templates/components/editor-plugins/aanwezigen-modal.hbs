@@ -41,8 +41,8 @@
       <label class="form__label">Aanwezige mandatarissen</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-mandatarissen-aanwezigen-table
-          overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen
-          overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen
+          mandatarissenAanwezigen=mandatarissenAanwezigen
+          mandatarissenAfwezigen=mandatarissenAfwezigen
           cachedMandatarissen=cachedMandatarissen
           onAddAanwezige=(action "addAanwezigeMandataris")
           onRemoveAanwezige=(action "removeAanwezigeMandataris")
@@ -52,8 +52,8 @@
       <label class="form__label">Overige aanwezige personen</label>
       <div class="u-spacer--tb--tiny">
         {{editor-plugins/overige-aanwezigen-table
-          overigePersonenAanwezigen=overigePersonenAanwezigen
-          overigePersonenAfwezigen=overigePersonenAfwezigen
+          personenAanwezigen=personenAanwezigen
+          personenAfwezigen=personenAfwezigen
           cachedPersonen=cachedPersonen
           onAddAanwezige=(action "addAanwezigePersoon")
           onRemoveAanwezige=(action "removeAanwezigePersoon")
@@ -71,9 +71,9 @@
 {{editor-plugins/aanwezigen-output-rdfa id=outputId class="u-hidden"
   voorzitter=voorzitter
   secretaris=secretaris
-  overigeMandatarissenAanwezigen=overigeMandatarissenAanwezigen
-  overigeMandatarissenAfwezigen=overigeMandatarissenAfwezigen
-  overigePersonenAanwezigen=overigePersonenAanwezigen
-  overigePersonenAfwezigen=overigePersonenAfwezigen
+  mandatarissenAanwezigen=mandatarissenAanwezigen
+  mandatarissenAfwezigen=mandatarissenAfwezigen
+  personenAanwezigen=personenAanwezigen
+  personenAfwezigen=personenAfwezigen
   propertyToUse=propertyToUse
 }}

@@ -9,8 +9,8 @@ export default Component.extend({
   layout,
   store: service(),
 
-  aanwezigenToSelect: computed('overigePersonenAanwezigen.[]', 'overigePersonenAfwezigen.[]', function(){
-    const listForTable = this.mergeAanwezigeStatus(this.overigePersonenAanwezigen || [], this.overigePersonenAfwezigen || [], []);
+  aanwezigenToSelect: computed('personenAanwezigen.[]', 'personenAfwezigen.[]', function(){
+    const listForTable = this.mergeAanwezigeStatus(this.personenAanwezigen || [], this.personenAfwezigen || [], []);
     return listForTable.sort(this.sortAanwezige);
   }),
 

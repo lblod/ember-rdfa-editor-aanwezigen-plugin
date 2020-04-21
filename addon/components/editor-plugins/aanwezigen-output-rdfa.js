@@ -11,19 +11,19 @@ export default Component.extend({
     this._super(...arguments);
     this.set('sortMandataris', ['isBestuurlijkeAliasVan.achternaam']);
     this.set('sortPersoon', ['achternaam']);
-    this.set('overigePersonenAanwezigen', A());
-    this.set('overigePersonenAfwezigen', A());
-    this.set('overigeMandatarissenAanwezigen', A());
-    this.set('overigeMandatarissenAfwezigen', A());
+    this.set('personenAanwezigen', A());
+    this.set('personenAfwezigen', A());
+    this.set('mandatarissenAanwezigen', A());
+    this.set('mandatarissenAfwezigen', A());
   },
 
   aanwezigenBijAgendapunt: computed('propertyToUse', function(){
     return this.propertyToUse == 'besluit:heeftAanwezigeBijStart';
   }),
 
-  sortedPersonenAanwezigen: sort('overigePersonenAanwezigen', 'sortPersoon'),
-  sortedPersonenAfwezigen: sort('overigePersonenAfwezigen', 'sortPersoon'),
-  sortedMandatarissenAanwezigen: sort('overigeMandatarissenAanwezigen', 'sortMandataris'),
-  sortedMandatarissenAfwezigen: sort('overigeMandatarissenAfwezigen', 'sortMandataris'),
+  sortedPersonenAanwezigen: sort('personenAanwezigen', 'sortPersoon'),
+  sortedPersonenAfwezigen: sort('personenAfwezigen', 'sortPersoon'),
+  sortedMandatarissenAanwezigen: sort('mandatarissenAanwezigen', 'sortMandataris'),
+  sortedMandatarissenAfwezigen: sort('mandatarissenAfwezigen', 'sortMandataris'),
 
 });
