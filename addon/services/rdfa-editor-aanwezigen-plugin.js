@@ -63,11 +63,11 @@ class RdfaEditorAanwezigenPlugin extends Service {
    *
    * @public
    */
-  
+
   @task
   // eslint-disable-next-line require-yield
   *execute(hrId, contexts, hintsRegistry, editor) {
-    if (contexts.length === 0) return [];
+    hintsRegistry.removeHints( { rdfaBlocks: contexts, hrId, scope: this.get('who') } );
 
     const hints = [];
     for(let context of contexts){
@@ -79,12 +79,10 @@ class RdfaEditorAanwezigenPlugin extends Service {
       let propertyToUse = this.returnPropertyToUse(context);
 
       if(predicate == this.insertAanwezigenText) {
-        hintsRegistry.removeHintsInRegion(context.region, hrId, this.who);
         hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor, { propertyToUse }));
       }
       let domNodeRegion = [ semanticNode.start, semanticNode.end ];
       if(predicate == this.aanwezigenTable && ! hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
-        hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
         hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor, { propertyToUse }));
       }
     }
