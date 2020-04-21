@@ -13,8 +13,6 @@ export default Component.extend({
   mandatarissenAanwezigen: null,
   /** list of mandatarissen that are not present **/
   mandatarissenAfwezigen: null,
-  /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
-  cachedMandatarissen: null,
 
   aanwezigenToSelect: computed('mandatarissenAanwezigen.[]', 'mandatarissenAfwezigen.[]', function(){
     const listForTable = this.mergeAanwezigeStatus(this.mandatarissenAanwezigen || [], this.mandatarissenAfwezigen || [], []);
