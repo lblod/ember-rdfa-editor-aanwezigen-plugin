@@ -116,7 +116,7 @@ export default class AanwezigenCard extends Component {
     `;
   }
 
-  @task 
+  @task
   *loadData() {
     yield this.setProperties();
   }
@@ -252,8 +252,8 @@ export default class AanwezigenCard extends Component {
   async setOverigeAfwezigen(triples){
     let overigePersonenAfwezigen = A();
     let overigeMandatarissenAfwezigen = A();
-    let subset = triples.filter(t => 
-      t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijAgendapunt'|| 
+    let subset = triples.filter(t =>
+      t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijAgendapunt'||
       t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijStart'
     ).map(t =>  t.object);
     subset = Array.from(new Set(subset));
@@ -283,8 +283,8 @@ export default class AanwezigenCard extends Component {
     }
     //if not existant try to create it on based on information in triples
     mandataris = (await this.store.query(
-      'mandataris', 
-      { 
+      'mandataris',
+      {
         'filter[:uri:]': subjectUri,
         include:'is-bestuurlijke-alias-van,is-bestuurlijke-alias-van.geboorte,bekleedt,bekleedt.bestuursfunctie'
       }
