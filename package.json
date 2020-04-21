@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-aanwezigen-plugin",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
