@@ -16,55 +16,27 @@ export default Component.extend({
   /** list of mandatarissen that were fetched previously, includes at least those that are expected to be present **/
   cachedMandatarissen: null,
 
-  aanwezigenToSelect: computed('overigeMandatarissenAanwezigen.[]', 'overigeMandatarissenAfwezigen.[]', '_aanwezigen.[]', {
-    get(){
-      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
-      this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
-      return this._aanwezigen;
-    },
-
-    set(k, v){
-      this.set('_aanwezigen', v);
-      this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [],this._aanwezigen);
-      this.set('_aanwezigen' , this._aanwezigen.sort(this.sortBuildAanwezige));
-      return this._aanwezigen;
-    }
+  aanwezigenToSelect: computed('overigeMandatarissenAanwezigen.[]', 'overigeMandatarissenAfwezigen.[]', function(){
+    const listForTable = this.mergeAanwezigeStatus(this.overigeMandatarissenAanwezigen || [], this.overigeMandatarissenAfwezigen || [], []);
+    return listForTable.sort(this.sortBuildAanwezige);
   }),
 
-  loadData: task(function *(){
-    let mandatarissen = this.cachedMandatarissen;
-
-    let aanwezigen = A( mandatarissen.map( mandataris => {return {'aanwezig': false, mandataris };}) );
-    if(this.overigeMandatarissenAanwezigen.length == 0){
-      aanwezigen.forEach(a => a.aanwezig = true);
-      this.overigeMandatarissenAanwezigen.setObjects(aanwezigen.map(a =>  a.mandataris));
-    }
-    this.set('aanwezigenToSelect', aanwezigen);
-  }),
-
-  didReceiveAttrs(){
-    this._super(...arguments);
-    this.set('_aanwezigen', A());
-    if(this.overigeMandatarissenAanwezigen)
-      this.loadData.perform();
-  },
-
-  mergeAanwezigeStatus(receivedAanwezigen, receivedAfwezigen, buildAanwezigen){
+  mergeAanwezigeStatus(receivedAanwezigen, receivedAfwezigen, listForTable){
     for(let mandataris of receivedAanwezigen){
-      let bAanwezige = buildAanwezigen.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
+      let bAanwezige = listForTable.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
       if(bAanwezige)
         bAanwezige['aanwezig'] = true;
       else
-        buildAanwezigen.pushObject({ 'aanwezig': true, mandataris });
+        listForTable.pushObject({ 'aanwezig': true, mandataris });
     }
     for(let mandataris of receivedAfwezigen){
-      let bAfwezige = buildAanwezigen.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
+      let bAfwezige = listForTable.find(b => mandataris.get('uri') == b.mandataris.get('uri'));
       if(bAfwezige)
         bAfwezige['aanwezig'] = false;
       else
-        buildAanwezigen.pushObject({ 'aanwezig': false, mandataris });
+        listForTable.pushObject({ 'aanwezig': false, mandataris });
     }
-    return buildAanwezigen;
+    return listForTable;
   },
 
   sortBuildAanwezige(a,b){
@@ -88,8 +60,7 @@ export default Component.extend({
     addAanwezige(){
       if(!this.newAanwezige)
         return;
-      this.aanwezigenToSelect.pushObject({ 'aanwezig': true, mandataris: this.newAanwezige });
-      this.overigeMandatarissenAanwezigen.pushObject(this.newAanwezige);
+      this.onAddAanwezige(this.newAanwezige);
 
       this.set('newAanwezige', null);
       this.set('addAanwezigeMode', false);
@@ -101,18 +72,11 @@ export default Component.extend({
     },
 
     toggleAanwezigheid(status, mandataris){
-      //todo: rethink this: mandataris is a proxy here.
       if(!status){
-        let p = this.overigeMandatarissenAanwezigen.find(p => p.get('uri')  == mandataris.get('uri'));
-        this.overigeMandatarissenAanwezigen.removeObject(p);
-
-        this.overigeMandatarissenAfwezigen.pushObject(mandataris);
+        this.onRemoveAanwezige(mandataris);
       }
       else {
-        this.overigeMandatarissenAanwezigen.pushObject(mandataris);
-
-        let p = this.overigeMandatarissenAfwezigen.find(p => p.get('uri')  == mandataris.get('uri'));
-        this.overigeMandatarissenAfwezigen.removeObject(p);
+        this.onAddAanwezige(mandataris);
       }
     }
   }

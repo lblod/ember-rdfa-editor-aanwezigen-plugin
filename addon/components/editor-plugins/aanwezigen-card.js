@@ -135,6 +135,12 @@ export default class AanwezigenCard extends Component {
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);
     yield this.setOverigeAfwezigen(triples);
+
+    //On initial load of the plugin, there will be no one marked as presen or absent.
+    //For UX we prepopulate the list
+    if(!(this.overigeMandatarissenAanwezigen.length && this.overigeMandatarissenAfwezigen.length)){
+      this.overigeMandatarissenAanwezigen.setObjects(this.cachedMandatarissen);
+   }
     this.set('tableDataReady', true);
   }
 
@@ -331,4 +337,15 @@ export default class AanwezigenCard extends Component {
     this.toggleProperty('popup');
   }
 
+  @action
+  addAanwezigeMandataris(mandataris){
+    this.overigeMandatarissenAanwezigen.pushObject(mandataris);
+    this.overigeMandatarissenAfwezigen.removeObject(mandataris);
+  }
+
+  @action
+  removeAanwezigeMandataris(mandataris){
+    this.overigeMandatarissenAanwezigen.removeObject(mandataris);
+    this.overigeMandatarissenAfwezigen.pushObject(mandataris);
+  }
 }

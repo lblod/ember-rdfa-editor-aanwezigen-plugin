@@ -41,4 +41,15 @@ export default class AanwezigenModal extends Component {
   finishCreatePerson(){
     this.set('viewMode', 'default');
   }
+
+  //TODO: there is too much redirection here. The bulk of the logic of aanwezigen-card should be moved here probably.
+  @action
+  addAanwezigeMandataris(mandataris){
+    this.onAddAanwezigeMandataris(mandataris);
+  }
+
+  @action
+  removeAanwezigeMandataris(mandataris){
+    this.onRemoveAanwezigeMandataris(mandataris);
+  }
 }
