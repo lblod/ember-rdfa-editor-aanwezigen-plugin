@@ -11,10 +11,6 @@ export default Component.extend({
     this._super(...arguments);
     this.set('sortMandataris', ['isBestuurlijkeAliasVan.achternaam']);
     this.set('sortPersoon', ['achternaam']);
-    this.set('personenAanwezigen', A());
-    this.set('personenAfwezigen', A());
-    this.set('mandatarissenAanwezigen', A());
-    this.set('mandatarissenAfwezigen', A());
   },
 
   aanwezigenBijAgendapunt: computed('propertyToUse', function(){
@@ -24,6 +20,6 @@ export default Component.extend({
   sortedPersonenAanwezigen: sort('personenAanwezigen', 'sortPersoon'),
   sortedPersonenAfwezigen: sort('personenAfwezigen', 'sortPersoon'),
   sortedMandatarissenAanwezigen: sort('mandatarissenAanwezigen', 'sortMandataris'),
-  sortedMandatarissenAfwezigen: sort('mandatarissenAfwezigen', 'sortMandataris'),
+  sortedMandatarissenAfwezigen: sort('mandatarissenAfwezigen', 'sortMandataris')
 
 });

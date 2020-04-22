@@ -139,7 +139,6 @@ export default class AanwezigenCard extends Component {
     }
 
     yield this.setPrepopulatedMandatarissen();
-    this.set('cachedPersonen', A());
     yield this.setVoorzitter(triples);
     yield this.setSecretaris(triples);
     yield this.setOverigeAanwezigen(triples);
