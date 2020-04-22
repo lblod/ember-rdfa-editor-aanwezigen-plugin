@@ -1,36 +1,22 @@
 <div class="modal-dialog__header">
   <div class="grid">
     <div class="col--10-12">
-      {{#if bestuursorgaanUri}}
-        {{#if loadData.isRunning}}
-          <p>Plugin laden</p>
-          <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
-        {{else}}
-          <p class="u-spacer--tiny">
-            Wil u graag de <strong>aanwezigen</strong> beheren?
-          </p>
-        {{/if}}
-      {{else}}
         <p class="u-spacer--tiny">
-          Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de aanwezigen invoert.
+          Wil u graag de <strong>aanwezigen</strong> beheren?
         </p>
-      {{/if}}
     </div>
   </div>
 </div>
+<div class="modal-dialog__footer">
+  {{#wu-button-group}}
+    {{wu-button
+      label="Beheer aanwezigen"
+      isNarrow=true
+      onClick=(action "togglePopup")
+    }}
+  {{/wu-button-group}}
+</div>
 
-{{#if bestuursorgaanUri}}
-  <div class="modal-dialog__footer">
-    {{#wu-button-group}}
-      {{wu-button
-        label="Beheer aanwezigen"
-        isNarrow=true
-        onClick=(action "togglePopup")
-        disabled=loadData.isRunning
-      }}
-    {{/wu-button-group}}
-  </div>
-{{/if}}
 
 {{# if popup}}
   {{#wu-modal
@@ -39,33 +25,44 @@
      onClose=(action 'togglePopup')
      as |m|}}
     {{#m.content isSectioned=false}}
-      {{editor-plugins/aanwezigen-modal
-        bestuurseenheid=bestuurseenheid
-        bestuursorgaan=bestuursorgaan
-        editMode=info.editMode
-        outputId=outputId
-        propertyToUse=info.propertyToUse
-        domTable=info.domNodeToUpdate
-        editTable=info.editMode
-        secretaris=secretaris
-        voorzitter=voorzitter
-        personenAanwezigen=personenAanwezigen
-        mandatarissenAanwezigen=mandatarissenAanwezigen
-        personenAfwezigen=personenAfwezigen
-        mandatarissenAfwezigen=mandatarissenAfwezigen
-        onAddAanwezigeMandataris=(action "addAanwezigeMandataris")
-        onRemoveAanwezigeMandataris=(action "removeAanwezigeMandataris")
-        onAddAanwezigePersoon=(action "addAanwezigePersoon")
-        onRemoveAanwezigePersoon=(action "removeAanwezigePersoon")
-        tableDataReady=tableDataReady
-      }}
+      {{#if this.loadDataForPopup.isRunning}}
+        <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+      {{else}}
+        {{#if this.bestuursorgaanUri}}
+          {{editor-plugins/aanwezigen-modal
+            bestuurseenheid=bestuurseenheid
+            bestuursorgaan=bestuursorgaan
+            editMode=info.editMode
+            outputId=outputId
+            propertyToUse=info.propertyToUse
+            domTable=info.domNodeToUpdate
+            editTable=info.editMode
+            secretaris=secretaris
+            voorzitter=voorzitter
+            personenAanwezigen=personenAanwezigen
+            mandatarissenAanwezigen=mandatarissenAanwezigen
+            personenAfwezigen=personenAfwezigen
+            mandatarissenAfwezigen=mandatarissenAfwezigen
+            onAddAanwezigeMandataris=(action "addAanwezigeMandataris")
+            onRemoveAanwezigeMandataris=(action "removeAanwezigeMandataris")
+            onAddAanwezigePersoon=(action "addAanwezigePersoon")
+            onRemoveAanwezigePersoon=(action "removeAanwezigePersoon")
+            tableDataReady=tableDataReady
+          }}
+        {{else}}
+          <p class="u-spacer--tiny">
+            Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de aanwezigen invoert.
+         </p>
+        {{/if}}
+      {{/if}}
     {{/m.content}}
     <div class="modal-dialog__footer">
       {{#wu-button-group}}
-        {{wu-button label="Voeg aanwezigen in" class="button button--narrow" onClick=(action 'insert')}}
+        {{#if this.bestuursorgaanUri}}
+          {{wu-button label="Voeg aanwezigen in" class="button button--narrow" onClick=(action 'insert')}}
+        {{/if}}
         {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
       {{/wu-button-group}}
     </div>
   {{/wu-modal}}
 {{/if}}
-{{yield}}

@@ -131,6 +131,7 @@ export default class AanwezigenCard extends Component {
 
   @task
   *loadDataForPopup(){
+    yield this.setProperties();
     let triples = [];
     if(this.info.editMode){
       //we need load the triples from the current table.
@@ -285,13 +286,6 @@ export default class AanwezigenCard extends Component {
 
   async fetchPersoon(subjectUri){
     return (await this.store.query('persoon', { 'filter[:uri:]': subjectUri })).firstObject;
-  }
-
-  didReceiveAttrs() {
-    super.didReceiveAttrs(...arguments);
-    if(this.editor) {
-      this.loadData.perform();
-    }
   }
 
   @action
