@@ -125,11 +125,6 @@ export default class AanwezigenCard extends Component {
   }
 
   @task
-  *loadData() {
-    yield this.setProperties();
-  }
-
-  @task
   *loadDataForPopup(){
     yield this.setProperties();
     let triples = [];

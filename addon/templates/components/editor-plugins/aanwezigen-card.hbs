@@ -25,10 +25,10 @@
      onClose=(action 'togglePopup')
      as |m|}}
     {{#m.content isSectioned=false}}
-      {{#if this.loadDataForPopup.isRunning}}
+      {{#if (and this.loadDataForPopup.isRunning (not this.tableDataReady))}}
         <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
       {{else}}
-        {{#if this.bestuursorgaanUri}}
+        {{#if this.bestuursorgaanUri }}
           {{editor-plugins/aanwezigen-modal
             bestuurseenheid=bestuurseenheid
             bestuursorgaan=bestuursorgaan
