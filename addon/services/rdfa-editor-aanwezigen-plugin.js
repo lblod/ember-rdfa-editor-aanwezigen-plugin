@@ -90,7 +90,6 @@ class RdfaEditorAanwezigenPlugin extends Service {
     const cards = hints.map( (hint) => this.generateCard(hrId, hintsRegistry, editor, hint, this.who));
     if(cards.length > 0){
       hintsRegistry.addHints(hrId, this.who, cards);
-      this.set('hasHints', true);
     }
   }
 
